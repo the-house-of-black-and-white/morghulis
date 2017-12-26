@@ -7,12 +7,12 @@ import os
 try:
     import tensorflow as tf
 except ImportError:
-    logging.warning("Tensorflow not installed some features won't work", exc_info=True)
+    logging.warning("Tensorflow not installed some features won't work")
 
 try:
     from PIL import Image as PilImage
 except ImportError:
-    logging.warning("Pillow not installed some features won't work", exc_info=True)
+    logging.warning("Pillow not installed some features won't work")
 
 log = logging.getLogger(__name__)
 

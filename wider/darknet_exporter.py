@@ -1,29 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-face.data
-classes= 1
-train  = /home/user/widerface/trainval.txt
-valid  = /home/user/widerface/test.txt
-names = face.names
-backup = backup/
-
-face.names
-
-
-images/
-annotations/
-
-"""
-
 import os
 import logging
 
 from . import ensure_dir
 
 log = logging.getLogger(__name__)
-
-
-classes = ["face"]
 
 
 class DarknetExporter:
@@ -45,7 +26,7 @@ class DarknetExporter:
     def _export(self, target_dir, dataset_name='train'):
         log.info('Converting %s data', dataset_name)
         images_root = os.path.join(target_dir, 'images/')
-        annotations_root = images_root
+        annotations_root = os.path.join(target_dir, 'labels/')
         ensure_dir(annotations_root)
         with open(os.path.join(target_dir, '{}.txt'.format(dataset_name)), 'w') as f:
             for i in getattr(self.widerface, '{}_set'.format(dataset_name))():
@@ -60,9 +41,12 @@ class DarknetExporter:
                         bbox = self._convert(i.size, face)
                         anno.write('0 ' + ' '.join([str(a) for a in bbox]) + '\n')
 
-    def _prepare(self, target_dir):
+    @staticmethod
+    def _prepare(target_dir):
         log.info('Preparing target dir: %s', target_dir)
         ensure_dir(os.path.join(target_dir, 'images/'))
+        ensure_dir(os.path.join(target_dir, 'labels/'))
+        ensure_dir(os.path.join(target_dir, 'backup/'))
 
         log.info('Creating obj.names')
         with open(os.path.join(target_dir, 'obj.names'), 'w') as obj_names:
