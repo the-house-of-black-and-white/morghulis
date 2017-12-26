@@ -52,6 +52,10 @@ class Image:
         self._faces.append(face)
 
     @property
+    def path(self):
+        return os.path.abspath(self.filename)
+
+    @property
     def image(self):
         if not self._image:
             self._image = PilImage.open(self.filename)
@@ -68,6 +72,10 @@ class Image:
     @property
     def height(self):
         return self.image.height
+
+    @property
+    def size(self):
+        return self.width, self.height
 
     @property
     def format(self):
@@ -254,3 +262,14 @@ class Wider:
         examples = [ex for ex in self.val_set()]
         log.info('Generating tf_record for val set: %s example(s)', len(examples))
         self._generate_tf_records(output_filename, examples)
+
+    def export_to_darknet(self):
+        pass
+
+    @property
+    def train_dir(self):
+        return os.path.join(self.root_dir, 'WIDER_train')
+
+    @property
+    def val_dir(self):
+        return os.path.join(self.root_dir, 'WIDER_val')

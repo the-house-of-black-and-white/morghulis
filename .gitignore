@@ -100,3 +100,6 @@ ENV/
 # mypy
 .mypy_cache/
 .idea/
+.tmp/
+test/sample/WIDER_val/annotations/
+test/sample/WIDER_train/annotations/

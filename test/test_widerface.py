@@ -2,12 +2,14 @@ import logging
 import sys
 import unittest
 
-from wider import Wider
+from wider import Wider, ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 WIDER_DIR = 'sample/'
+TMP_DIR = '/opt/project/.tmp/'
+ensure_dir(TMP_DIR)
 
 
 class WiderTests(unittest.TestCase):
@@ -58,4 +60,4 @@ class WiderTests(unittest.TestCase):
         self.assertIsNotNone(example)
 
     def test_tf_records(self):
-        self.wider.generate_tf_records('/opt/project/.tmp/')
+        self.wider.generate_tf_records(TMP_DIR)
