@@ -1,5 +1,6 @@
 import hashlib
 import io
+from shutil import copy
 import logging
 import os
 
@@ -80,6 +81,11 @@ class Image:
     @property
     def format(self):
         return self.image.format
+
+    def copy_to(self, target_dir):
+        new_path = os.path.join(target_dir, os.path.basename(self.filename))
+        copy(self.path, target_dir)
+        return new_path
 
     def tf_example(self):
 
@@ -171,6 +177,10 @@ class Face:
     @property
     def h(self):
         return self._h
+
+    @property
+    def center(self):
+        return (self.x1 + self.w) / 2. , (self.y1 + self.h) / 2.
 
     @property
     def blur(self):

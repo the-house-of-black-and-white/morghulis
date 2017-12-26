@@ -18,7 +18,7 @@ class DarknetTests(unittest.TestCase):
         self.darknetExporter = DarknetExporter(self.wider)
 
     def test_sanity(self):
-        self.darknetExporter.export('/opt/project/.tmp/')
+        self.darknetExporter.export('/opt/project/.tmp/darknet/')
 
 
 # if __name__ == '__main__':
