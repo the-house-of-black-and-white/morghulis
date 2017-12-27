@@ -21,7 +21,7 @@ class DarknetExporter:
         w = box.w * dw
         y = cy * dh
         h = box.h * dh
-        return x, y, w, h
+        return max(0.005, x), max(0.005, y), min(0.995, w), min(0.995, h)
 
     def _export(self, target_dir, dataset_name='train'):
         log.info('Converting %s data', dataset_name)
@@ -30,16 +30,17 @@ class DarknetExporter:
         ensure_dir(annotations_root)
         with open(os.path.join(target_dir, '{}.txt'.format(dataset_name)), 'w') as f:
             for i in getattr(self.widerface, '{}_set'.format(dataset_name))():
-                path = i.copy_to(images_root)
-                f.write('{}\n'.format(path))
-                head, _ = os.path.splitext(path)
-                head, tail = os.path.split(head)
-                annotation_file = os.path.join(annotations_root, tail+'.txt')
-                ensure_dir(annotation_file)
-                with open(annotation_file, 'w') as anno:
-                    for face in i.faces:
-                        bbox = self._convert(i.size, face)
-                        anno.write('0 ' + ' '.join([str(a) for a in bbox]) + '\n')
+                if len(i.faces) > 0:
+                    path = i.copy_to(images_root)
+                    f.write('{}\n'.format(path))
+                    head, _ = os.path.splitext(path)
+                    head, tail = os.path.split(head)
+                    annotation_file = os.path.join(annotations_root, tail+'.txt')
+                    ensure_dir(annotation_file)
+                    with open(annotation_file, 'w') as anno:
+                        for face in i.faces:
+                            bbox = self._convert(i.size, face)
+                            anno.write('0 ' + ' '.join([str(a) for a in bbox]) + '\n')
 
     @staticmethod
     def _prepare(target_dir):
@@ -55,9 +56,9 @@ class DarknetExporter:
         log.info('Creating obj.data')
         with open(os.path.join(target_dir, 'obj.data'), 'w') as obj_data:
             obj_data.write('classes = 1\n')
-            obj_data.write('train = data/train.txt\n')
-            obj_data.write('valid = data/val.txt\n')
-            obj_data.write('names = data/obj.names\n')
+            obj_data.write('train = train.txt\n')
+            obj_data.write('valid = val.txt\n')
+            obj_data.write('names = obj.names\n')
             obj_data.write('backup = backup/\n')
 
     def export(self, target_dir):

@@ -50,6 +50,20 @@ class Image:
         :return:
         """
         face = Face(annotations)
+
+        if face.invalid == 1:
+            log.warning('Skipping INVALID %s from %s', face, self)
+            return
+
+        # if face.blur > 0:
+        #     log.warning('Skipping BLURRED %s from %s', face, self)
+        #     return
+
+        n = max(face.w, face.h)
+        if n < 20:
+            log.warning('Skipping SMALL(<20) %s from %s', face, self)
+            return
+
         self._faces.append(face)
 
     @property
@@ -144,6 +158,9 @@ class Image:
         example = tf.train.Example(features=tf.train.Features(feature=feature_dict))
         return example
 
+    def __str__(self):
+        return 'Image( filename={} )'.format(self.filename)
+
 
 class Face:
     def __init__(self, anno):
@@ -180,7 +197,7 @@ class Face:
 
     @property
     def center(self):
-        return (self.x1 + self.w) / 2. , (self.y1 + self.h) / 2.
+        return (self.x1 + self.w) / 2., (self.y1 + self.h) / 2.
 
     @property
     def blur(self):
@@ -205,6 +222,10 @@ class Face:
     @property
     def pose(self):
         return self._pose
+
+    def __str__(self):
+        return 'Face( x1={}, y1={}, w={}, h={}, invalid={}, blur={} )'.format(self.x1, self.y1, self.w, self.h,
+                                                                              self.invalid, self.blur)
 
 
 class Wider:
