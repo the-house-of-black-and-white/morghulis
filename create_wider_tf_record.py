@@ -15,6 +15,7 @@ import logging
 import tensorflow as tf
 
 from wider import Wider
+from wider.tensorflow_exporter import TensorflowExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -26,7 +27,8 @@ FLAGS = flags.FLAGS
 
 def main(_):
     wider = Wider(FLAGS.data_dir)
-    wider.generate_tf_records(FLAGS.output_dir)
+    exporter = TensorflowExporter(wider)
+    exporter.export(FLAGS.output_dir)
 
 
 if __name__ == '__main__':

@@ -1,13 +1,6 @@
-import hashlib
-import io
 from shutil import copy
 import logging
 import os
-
-try:
-    import tensorflow as tf
-except ImportError:
-    logging.warning("Tensorflow not installed some features won't work")
 
 try:
     from PIL import Image as PilImage
@@ -15,26 +8,6 @@ except ImportError:
     logging.warning("Pillow not installed some features won't work")
 
 log = logging.getLogger(__name__)
-
-
-def int64_feature(value):
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
-
-
-def int64_list_feature(value):
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
-
-
-def bytes_feature(value):
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
-
-
-def bytes_list_feature(value):
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=value))
-
-
-def float_list_feature(value):
-    return tf.train.Feature(float_list=tf.train.FloatList(value=value))
 
 
 class Image:
@@ -100,63 +73,6 @@ class Image:
         new_path = os.path.join(target_dir, os.path.basename(self.filename))
         copy(self.path, target_dir)
         return new_path
-
-    def tf_example(self):
-
-        with tf.gfile.GFile(self.filename, 'rb') as fid:
-            encoded_jpg = fid.read()
-        encoded_jpg_io = io.BytesIO(encoded_jpg)
-        self._image = PilImage.open(encoded_jpg_io)
-
-        if self.format != 'JPEG':
-            raise ValueError('Image format not JPEG')
-
-        key = hashlib.sha256(encoded_jpg).hexdigest()
-        width = self.width
-        height = self.height
-        xmins = []
-        ymins = []
-        xmaxs = []
-        ymaxs = []
-        classes = []
-        classes_text = []
-        truncated = []
-        poses = []
-        difficult_obj = []
-
-        for face in self.faces:
-            xmins.append(max(0.005, (face.x1 / width)))
-            ymins.append(max(0.005, (face.y1 / height)))
-            xmaxs.append(min(0.995, (face.x1 + face.w) / width))
-            ymaxs.append(min(0.995, (face.y1 + face.h) / height))
-            classes_text.append('face')
-            classes.append(1)
-            poses.append("unspecified".encode('utf8'))
-            truncated.append(int(1) if face.occlusion > 0 else int(0))
-            difficult_obj.append(int(0))
-
-        _, filename = os.path.split(self.filename)
-
-        feature_dict = {
-            'image/height': int64_feature(height),
-            'image/width': int64_feature(width),
-            'image/filename': bytes_feature(filename.encode('utf8')),
-            'image/source_id': bytes_feature(filename.encode('utf8')),
-            'image/key/sha256': bytes_feature(key.encode('utf8')),
-            'image/encoded': bytes_feature(encoded_jpg),
-            'image/format': bytes_feature('jpeg'.encode('utf8')),
-            'image/object/bbox/xmin': float_list_feature(xmins),
-            'image/object/bbox/xmax': float_list_feature(xmaxs),
-            'image/object/bbox/ymin': float_list_feature(ymins),
-            'image/object/bbox/ymax': float_list_feature(ymaxs),
-            'image/object/class/text': bytes_list_feature(classes_text),
-            'image/object/class/label': int64_list_feature(classes),
-            'image/object/difficult': int64_list_feature(difficult_obj),
-            'image/object/truncated': int64_list_feature(truncated),
-            'image/object/view': bytes_list_feature(poses),
-        }
-        example = tf.train.Example(features=tf.train.Features(feature=feature_dict))
-        return example
 
     def __str__(self):
         return 'Image( filename={} )'.format(self.filename)
@@ -266,36 +182,6 @@ class Wider:
     def val_set(self):
         for i in self._image_set(self._val_gt, self._val_images_dir):
             yield i
-
-    @staticmethod
-    def _generate_tf_records(output_filename, examples):
-        writer = tf.python_io.TFRecordWriter(output_filename)
-        for idx, example in enumerate(examples):
-            if idx % 100 == 0:
-                logging.info('On image %d of %d', idx, len(examples))
-            try:
-                tf_example = example.tf_example()
-                writer.write(tf_example.SerializeToString())
-            except Exception:
-                logging.warning('Invalid example: %s, ignoring.', example.filename)
-        writer.close()
-
-    def generate_tf_records(self, output_dir):
-
-        output_filename = os.path.join(output_dir, 'wider_train.record')
-        log.info('Loading train set, it might take a while')
-        examples = [ex for ex in self.train_set()]
-        log.info('Generating tf_record for train set: %s example(s)', len(examples))
-        self._generate_tf_records(output_filename, examples)
-
-        output_filename = os.path.join(output_dir, 'wider_val.record')
-        log.info('Loading val set, it might take a while')
-        examples = [ex for ex in self.val_set()]
-        log.info('Generating tf_record for val set: %s example(s)', len(examples))
-        self._generate_tf_records(output_filename, examples)
-
-    def export_to_darknet(self):
-        pass
 
     @property
     def train_dir(self):

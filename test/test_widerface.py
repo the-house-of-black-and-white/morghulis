@@ -53,11 +53,3 @@ class WiderTests(unittest.TestCase):
         self.assertEqual(682, image.height)
         self.assertEqual('JPEG', image.format)
 
-    def test_tf_example(self):
-        soldier_drilling = [image for image in self.wider.train_set() if 'Soldier_Drilling' in image.filename]
-        image = soldier_drilling[0]
-        example = image.tf_example()
-        self.assertIsNotNone(example)
-
-    def test_tf_records(self):
-        self.wider.generate_tf_records(TMP_DIR)
