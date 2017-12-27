@@ -13,9 +13,9 @@ class DarknetExporter:
         self.widerface = wf
 
     @staticmethod
-    def _convert(size, box):
-        dw = 1. / size[0]
-        dh = 1. / size[1]
+    def _convert(img_size, box):
+        dw = 1. / img_size[0]
+        dh = 1. / img_size[1]
         cx, cy = box.center
         x = cx * dw
         w = box.w * dw

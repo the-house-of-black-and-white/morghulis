@@ -90,7 +90,7 @@ class Image:
 
     @property
     def size(self):
-        return self.width, self.height
+        return self.image.size
 
     @property
     def format(self):
@@ -197,7 +197,7 @@ class Face:
 
     @property
     def center(self):
-        return (self.x1 + self.w) / 2., (self.y1 + self.h) / 2.
+        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
 
     @property
     def blur(self):
