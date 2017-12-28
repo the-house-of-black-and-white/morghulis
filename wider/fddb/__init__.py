@@ -19,6 +19,14 @@ class Face(BaseFace):
         self._center_y = float(anno[4])
 
     @property
+    def x1(self):
+        return self._center_x - self._minor_axis_radius
+
+    @property
+    def y1(self):
+        return self._center_y - self._major_axis_radius
+
+    @property
     def w(self):
         return self._minor_axis_radius * 2
 

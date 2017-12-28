@@ -2,12 +2,14 @@ import logging
 import sys
 import unittest
 
+import os
+
 from wider import FDDB, ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
-FDDB_DIR = 'FDDB_sample/'
+FDDB_DIR = os.path.dirname(__file__) + '/FDDB_sample/'
 TMP_DIR = '/opt/project/.tmp/'
 ensure_dir(TMP_DIR)
 

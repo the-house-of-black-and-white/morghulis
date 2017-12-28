@@ -60,6 +60,14 @@ class BaseFace:
     __metaclass__ = ABCMeta
 
     @abstractproperty
+    def x1(self):
+        pass
+
+    @abstractproperty
+    def y1(self):
+        pass
+
+    @abstractproperty
     def w(self):
         pass
 

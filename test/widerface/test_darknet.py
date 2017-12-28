@@ -3,13 +3,15 @@ import sys
 import unittest
 from shutil import rmtree
 
+import os
+
 from wider.widerface import Wider
 from wider.widerface.darknet_exporter import DarknetExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
-WIDER_DIR = 'sample/'
+WIDER_DIR = os.path.dirname(__file__) + '/WIDERFACE_sample/'
 TMP_DIR = '/opt/project/.tmp/darknet/'
 
 
