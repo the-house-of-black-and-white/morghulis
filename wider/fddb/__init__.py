@@ -50,6 +50,9 @@ class Face(BaseFace):
     def minor_axis_radius(self):
         return self._minor_axis_radius
 
+    def __str__(self):
+        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
+
 
 class FDDB:
     def __init__(self, root_dir):

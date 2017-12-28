@@ -12,7 +12,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
 
 WIDER_DIR = os.path.dirname(__file__) + '/WIDERFACE_sample/'
-TMP_DIR = '/opt/project/.tmp/tensorflow/'
+TMP_DIR = '/opt/project/.tmp/widerface/tensorflow/'
 
 
 class TensorflowExporterTests(unittest.TestCase):

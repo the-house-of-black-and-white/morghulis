@@ -49,11 +49,14 @@ class Image:
 
     def copy_to(self, target_dir):
         new_path = os.path.join(target_dir, os.path.basename(self.filename))
+        if os.path.exists(new_path):
+            log.error('%s is being overwritten.', new_path)
+            raise Exception(new_path + ' already exists')
         copy(self.path, target_dir)
         return new_path
 
     def __str__(self):
-        return 'Image( filename={} )'.format(self.filename)
+        return 'Image(filename={})'.format(self.filename)
 
 
 class BaseFace:

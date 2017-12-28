@@ -14,22 +14,33 @@ import sys
 import logging
 import argparse
 
-from wider.widerface import Wider
-from wider.widerface.darknet_exporter import DarknetExporter
-
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', dest='dataset', action='store', required=True, help='widerface or fddb')
     parser.add_argument('--data_dir', dest='data_dir', action='store', required=True, help='')
     parser.add_argument('--output_dir', dest='output_dir', action='store', required=True, help='')
     args = parser.parse_args()
+    dataset = args.dataset
     data_dir = args.data_dir
     output_dir = args.output_dir
-    wider = Wider(data_dir)
-    exporter = DarknetExporter(wider)
-    exporter.export(output_dir)
+
+    if dataset == 'widerface':
+        from wider.widerface import Wider
+        from wider.widerface.darknet_exporter import DarknetExporter
+        ds = Wider(data_dir)
+        exporter = DarknetExporter(ds)
+        exporter.export(output_dir)
+    elif dataset == 'fddb':
+        from wider.fddb import FDDB
+        from wider.fddb.darknet_exporter import DarknetExporter
+        ds = FDDB(data_dir)
+        exporter = DarknetExporter(ds)
+        exporter.export(output_dir)
+    else:
+        logging.error('Invalid dataset name %s', dataset)
 
 
 if __name__ == '__main__':

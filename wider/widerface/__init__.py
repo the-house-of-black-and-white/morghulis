@@ -84,7 +84,7 @@ class Face(BaseFace):
         return True
 
     def __str__(self):
-        return 'Face( x1={}, y1={}, w={}, h={}, invalid={}, blur={} )'.format(self.x1, self.y1, self.w, self.h,
+        return 'Face(x1={}, y1={}, w={}, h={}, invalid={}, blur={})'.format(self.x1, self.y1, self.w, self.h,
                                                                               self.invalid, self.blur)
 
 
