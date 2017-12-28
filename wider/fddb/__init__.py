@@ -51,7 +51,8 @@ class Face(BaseFace):
         return self._minor_axis_radius
 
     def __str__(self):
-        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
+        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h,
+                                                                              self.invalid, self.blur)
 
 
 class FDDB:
@@ -67,7 +68,7 @@ class FDDB:
             filename = f.readline().rstrip()
             while filename:
                 log.debug(filename)
-                image = Image(os.path.join(self.images_dir, filename + '.jpg'))
+                image = Image(os.path.join(self.images_dir, filename + '.jpg'), filename + '.jpg')
                 face_num = int(f.readline().rstrip())
                 log.debug(face_num)
                 for _ in range(face_num):

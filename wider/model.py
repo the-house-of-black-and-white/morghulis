@@ -5,12 +5,15 @@ from shutil import copy
 
 from PIL import Image as PilImage
 
+from os_utils import ensure_dir
+
 log = logging.getLogger(__name__)
 
 
 class Image:
-    def __init__(self, filename):
+    def __init__(self, filename, raw_filename=None):
         self.filename = filename
+        self.raw_filename = raw_filename
         self._faces = []
         self._image = None
 
@@ -47,12 +50,24 @@ class Image:
     def format(self):
         return self.image.format
 
-    def copy_to(self, target_dir):
+    @property
+    def subdir(self):
+        return os.path.dirname(self.raw_filename) + '/' if self.raw_filename else None
+
+    def copy_to(self, target_dir, include_subdirs=False):
+
+        if include_subdirs:
+            target_dir = os.path.join(target_dir, self.subdir)
+
         new_path = os.path.join(target_dir, os.path.basename(self.filename))
+
         if os.path.exists(new_path):
             log.error('%s is being overwritten.', new_path)
             raise Exception(new_path + ' already exists')
+
+        ensure_dir(target_dir)
         copy(self.path, target_dir)
+
         return new_path
 
     def __str__(self):
