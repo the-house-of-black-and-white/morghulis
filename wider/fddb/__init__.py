@@ -1,7 +1,7 @@
 import logging
 import os
 
-from model import Image, BaseFace
+from wider.model import BaseFace, Image
 
 log = logging.getLogger(__name__)
 
@@ -43,13 +43,13 @@ class Face(BaseFace):
         return self._minor_axis_radius
 
 
-
 class FDDB:
     def __init__(self, root_dir):
         self.root_dir = root_dir
         self.images_dir = os.path.join(self.root_dir, 'originalPics')
         self.annotations_dir = os.path.join(self.root_dir, 'FDDB-folds')
-        self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if 'ellipseList' in f]
+        self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if
+                                 'ellipseList' in f]
 
     def _image_set(self, annotation_file):
         with open(annotation_file) as f:

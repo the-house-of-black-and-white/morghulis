@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
 
-from . import ensure_dir
+from wider import ensure_dir
 
 log = logging.getLogger(__name__)
 

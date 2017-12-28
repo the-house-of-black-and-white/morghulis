@@ -3,8 +3,8 @@ import sys
 import unittest
 from shutil import rmtree
 
-from wider import Wider
-from wider.tensorflow_exporter import TensorflowExporter
+from wider.widerface import Wider
+from wider.widerface.tensorflow_exporter import TensorflowExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

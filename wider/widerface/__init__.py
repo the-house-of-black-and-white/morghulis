@@ -1,7 +1,7 @@
 import logging
 import os
 
-from model import Image, BaseFace
+from wider.model import Image, BaseFace
 
 log = logging.getLogger(__name__)
 

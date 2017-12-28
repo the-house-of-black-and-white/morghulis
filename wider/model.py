@@ -1,6 +1,6 @@
 import logging
 import os
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import ABCMeta, abstractproperty
 from shutil import copy
 
 from PIL import Image as PilImage

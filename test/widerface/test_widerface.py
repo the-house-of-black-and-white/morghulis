@@ -2,7 +2,8 @@ import logging
 import sys
 import unittest
 
-from wider import Wider, ensure_dir
+from wider.widerface import Wider
+from wider import ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

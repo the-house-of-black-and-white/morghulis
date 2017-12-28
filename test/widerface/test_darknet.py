@@ -1,10 +1,10 @@
 import logging
 import sys
 import unittest
-from shutil import  rmtree
+from shutil import rmtree
 
-from wider import Wider
-from wider.darknet_exporter import DarknetExporter
+from wider.widerface import Wider
+from wider.widerface.darknet_exporter import DarknetExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

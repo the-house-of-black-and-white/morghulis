@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import io
-import os
 import hashlib
+import io
 import logging
+import os
 
-from PIL import Image as PilImage
 import tensorflow as tf
+from PIL import Image as PilImage
 
-from . import ensure_dir
+from wider import ensure_dir
 
 log = logging.getLogger(__name__)
 
