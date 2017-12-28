@@ -1,9 +1,91 @@
 import logging
 import os
 
-from model import Image
+from model import Image, BaseFace
 
 log = logging.getLogger(__name__)
+
+
+class Face(BaseFace):
+    def __init__(self, anno):
+        """
+        x1, y1, w, h, blur, expression, illumination, invalid, occlusion, pose
+        :param annotations:
+        """
+        self._x1 = float(anno[0])
+        self._y1 = float(anno[1])
+        self._w = float(anno[2])
+        self._h = float(anno[3])
+        self._blur = int(anno[4])
+        self._expression = int(anno[5])
+        self._illumination = int(anno[6])
+        self._invalid = int(anno[7])
+        self._occlusion = int(anno[8])
+        self._pose = int(anno[9])
+
+    @property
+    def x1(self):
+        return self._x1
+
+    @property
+    def y1(self):
+        return self._y1
+
+    @property
+    def w(self):
+        return self._w
+
+    @property
+    def h(self):
+        return self._h
+
+    @property
+    def center(self):
+        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
+
+    @property
+    def blur(self):
+        return self._blur
+
+    @property
+    def expression(self):
+        return self._expression
+
+    @property
+    def illumination(self):
+        return self._illumination
+
+    @property
+    def invalid(self):
+        return self._invalid
+
+    @property
+    def occlusion(self):
+        return self._occlusion
+
+    @property
+    def pose(self):
+        return self._pose
+
+    def is_valid(self, image):
+        if self.invalid == 1:
+            log.warning('Skipping INVALID %s from %s', self, image)
+            return False
+
+        # if face.blur > 0:
+        #     log.warning('Skipping BLURRED %s from %s', face, self)
+        #     return
+
+        n = max(self.w, self.h)
+        if n < 20:
+            log.warning('Skipping SMALL(<20) %s from %s', self, image)
+            return False
+
+        return True
+
+    def __str__(self):
+        return 'Face( x1={}, y1={}, w={}, h={}, invalid={}, blur={} )'.format(self.x1, self.y1, self.w, self.h,
+                                                                              self.invalid, self.blur)
 
 
 class Wider:
@@ -33,7 +115,9 @@ class Wider:
                 for _ in range(face_num):
                     anno = f.readline().rstrip().split()
                     log.debug(anno)
-                    image.add_face(anno)
+                    face = Face(anno)
+                    if face.is_valid(image):
+                        image.add_face(face)
                 filename = f.readline().rstrip()
                 yield image
 

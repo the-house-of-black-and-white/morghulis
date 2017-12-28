@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+from abc import ABCMeta, abstractmethod, abstractproperty
 from shutil import copy
 
 from PIL import Image as PilImage
@@ -13,27 +14,7 @@ class Image:
         self._faces = []
         self._image = None
 
-    def add_face(self, annotations):
-        """
-        x1, y1, w, h, blur, expression, illumination, invalid, occlusion, pose
-        :param annotations:
-        :return:
-        """
-        face = Face(annotations)
-
-        if face.invalid == 1:
-            log.warning('Skipping INVALID %s from %s', face, self)
-            return
-
-        # if face.blur > 0:
-        #     log.warning('Skipping BLURRED %s from %s', face, self)
-        #     return
-
-        n = max(face.w, face.h)
-        if n < 20:
-            log.warning('Skipping SMALL(<20) %s from %s', face, self)
-            return
-
+    def add_face(self, face):
         self._faces.append(face)
 
     @property
@@ -75,67 +56,21 @@ class Image:
         return 'Image( filename={} )'.format(self.filename)
 
 
-class Face:
-    def __init__(self, anno):
-        """
-        x1, y1, w, h, blur, expression, illumination, invalid, occlusion, pose
-        :param annotations:
-        """
-        self._x1 = float(anno[0])
-        self._y1 = float(anno[1])
-        self._w = float(anno[2])
-        self._h = float(anno[3])
-        self._blur = int(anno[4])
-        self._expression = int(anno[5])
-        self._illumination = int(anno[6])
-        self._invalid = int(anno[7])
-        self._occlusion = int(anno[8])
-        self._pose = int(anno[9])
+class BaseFace:
+    __metaclass__ = ABCMeta
 
-    @property
-    def x1(self):
-        return self._x1
-
-    @property
-    def y1(self):
-        return self._y1
-
-    @property
+    @abstractproperty
     def w(self):
-        return self._w
+        pass
 
-    @property
+    @abstractproperty
     def h(self):
-        return self._h
+        pass
 
-    @property
+    @abstractproperty
     def center(self):
-        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
-
-    @property
-    def blur(self):
-        return self._blur
-
-    @property
-    def expression(self):
-        return self._expression
-
-    @property
-    def illumination(self):
-        return self._illumination
+        pass
 
     @property
     def invalid(self):
-        return self._invalid
-
-    @property
-    def occlusion(self):
-        return self._occlusion
-
-    @property
-    def pose(self):
-        return self._pose
-
-    def __str__(self):
-        return 'Face( x1={}, y1={}, w={}, h={}, invalid={}, blur={} )'.format(self.x1, self.y1, self.w, self.h,
-                                                                              self.invalid, self.blur)
+        return 0
