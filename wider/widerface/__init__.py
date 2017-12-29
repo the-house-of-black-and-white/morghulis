@@ -136,3 +136,8 @@ class Wider:
     @property
     def val_dir(self):
         return os.path.join(self.root_dir, 'WIDER_val')
+
+    def download(self):
+        from wider.widerface.downloader import WiderFaceDownloader
+        downloader = WiderFaceDownloader(self.root_dir)
+        downloader.download()
