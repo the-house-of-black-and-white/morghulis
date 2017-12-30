@@ -4,8 +4,26 @@ Python API for face datasets:
  
  * [WIDER FACE](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/)
  * [FDDB](http://vis-www.cs.umass.edu/fddb/)
- 
 ## Usage
+
+```bash
+
+docker run --rm -it \
+    -v ${PWD}/datasets:/datasets \
+    housebw/morghulis \
+    ./download_dataset.py  --dataset widerface --output_dir /datasets/widerface
+
+
+
+docker run --rm -it \
+    -v ${PWD}/datasets:/datasets \
+    housebw/morghulis \
+    ./create_wider_tf_record.py  \
+        --dataset widerface \
+        --output_dir /datasets/widerface/tensorflow/ \
+        --data_dir /datasets/widerface
+```
+
 
 ### WIDER FACE
 

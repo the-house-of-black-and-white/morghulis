@@ -123,4 +123,4 @@
 41 357 8 12 2 0 0 0 1 0
 9--Press_Conference/9_Press_Conference_Press_Conference_9_266.jpg
 1
-400 150 208 290 0 1 2 3 4 5
+400 150 208 290 0 1 2 0 4 5

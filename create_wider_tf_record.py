@@ -30,15 +30,15 @@ def main(_):
 
     if FLAGS.dataset == 'widerface':
         from morghulis.widerface import Wider
-        from morghulis.widerface.darknet_exporter import DarknetExporter
+        from morghulis.widerface.tensorflow_exporter import TensorflowExporter
         ds = Wider(FLAGS.data_dir)
-        exporter = DarknetExporter(ds)
+        exporter = TensorflowExporter(ds)
         exporter.export(FLAGS.output_dir)
     elif FLAGS.dataset == 'fddb':
         from morghulis.fddb import FDDB
-        from morghulis.fddb.darknet_exporter import DarknetExporter
+        from morghulis.fddb.tensorflow_exporter import TensorflowExporter
         ds = FDDB(FLAGS.data_dir)
-        exporter = DarknetExporter(ds)
+        exporter = TensorflowExporter(ds)
         exporter.export(FLAGS.output_dir)
     else:
         logging.error('Invalid dataset name %s', FLAGS.dataset)

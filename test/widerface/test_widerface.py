@@ -45,7 +45,7 @@ class WiderTests(unittest.TestCase):
         self.assertEqual(0, face.blur)
         self.assertEqual(1, face.expression)
         self.assertEqual(2, face.illumination)
-        self.assertEqual(3, face.invalid)
+        self.assertEqual(0, face.invalid)
         self.assertEqual(4, face.occlusion)
         self.assertEqual(5, face.pose)
 

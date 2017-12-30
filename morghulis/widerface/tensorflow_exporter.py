@@ -69,7 +69,7 @@ class TensorflowExporter:
             classes.append(1)
             poses.append("unspecified".encode('utf8'))
             truncated.append(int(1) if face.occlusion > 0 else int(0))
-            difficult_obj.append(int(0))
+            difficult_obj.append(int(1) if face.blur > 0 else int(0))
 
         _, filename = os.path.split(image.filename)
 

@@ -76,10 +76,10 @@ class Face(BaseFace):
         #     log.warning('Skipping BLURRED %s from %s', face, self)
         #     return
 
-        n = max(self.w, self.h)
-        if n < 20:
-            log.warning('Skipping SMALL(<20) %s from %s', self, image)
-            return False
+        # n = max(self.w, self.h)
+        # if n < 20:
+        #     log.warning('Skipping SMALL(<20) %s from %s', self, image)
+        #     return False
 
         return True
 
@@ -116,8 +116,10 @@ class Wider:
                     anno = f.readline().rstrip().split()
                     log.debug(anno)
                     face = Face(anno)
-                    if face.is_valid(image):
+                    if not face.invalid:
                         image.add_face(face)
+                    else:
+                        log.warning('Skipping INVALID %s from %s', face, image)
                 filename = f.readline().rstrip()
                 yield image
 
