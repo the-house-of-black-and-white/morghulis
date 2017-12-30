@@ -1,9 +1,66 @@
+# coding=utf-8
 import logging
 import os
-
-from morghulis.model import Image, BaseFace
+import re
+from morghulis.model import Image as BaseImage, BaseFace
 
 log = logging.getLogger(__name__)
+
+# http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/support/paper.pdf
+# subset partitions based on scale
+
+HARD_SUBSET_CATEGORIES = {'Traffic', 'Festival', 'Parade', 'Demonstration', 'Ceremony', 'People Marching', 'Basketball',
+                          'Shoppers', 'Matador Bullfighter', 'Car Accident', 'Election Campain', 'Concerts',
+                          'Award Ceremony', 'Picnic', 'Riot', 'Funeral', 'Cheering', 'Soldier Firing', 'Car Racing',
+                          'Voter'}
+
+MEDIUM_SUBSET_CATEGORIES = {'Stock Market', 'Hockey', 'Students Schoolkids', 'Ice Skating', 'Greeting', 'Football',
+                            'Running', 'people driving car', 'Soldier Drilling', 'Photographers', 'Sports Fan', 'Group',
+                            'Celebration Or Party', 'Soccer', 'Interview', 'Raid', 'Baseball', 'Soldier Patrol',
+                            'Angler', 'Rescue'}
+
+EASY_SUBSET_CATEGORIES = {'Gymnastics', 'Handshaking', 'Waiter Waitress', 'Press Conference', 'Worker Laborer',
+                          'Parachutist Paratrooper', 'Sports Coach Trainer', 'Meeting', 'Aerobics', 'Row Boat',
+                          'Dancing', 'Swimming', 'Family Group', 'Balloonist', 'Dresses', 'Couple', 'Jockey', 'Tennis',
+                          'Spa', 'Surgeons'}
+
+CATEGORY_RE = re.compile(r".*/(\d+)--(\w+)/.*")
+
+
+class Event:
+    def __init__(self, filename):
+        match = next(re.finditer(CATEGORY_RE, filename))
+        self._id = match.group(1)
+        self._category = match.group(2).replace('_', ' ')
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def category(self):
+        return self._category
+
+    def __str__(self):
+        return 'Event(id={}, category={})'.format(self.id, self.category)
+
+
+class Image(BaseImage):
+    def __init__(self, filename, raw_filename=None):
+        BaseImage.__init__(self, filename, raw_filename)
+        self.event = Event(filename)
+
+    def is_hard(self):
+        return self.event.category in HARD_SUBSET_CATEGORIES
+
+    def is_easy(self):
+        return self.event.category in EASY_SUBSET_CATEGORIES
+
+    def is_medium(self):
+        return self.event.category in MEDIUM_SUBSET_CATEGORIES
+
+    def __str__(self):
+        return 'Image(filename={}, event={})'.format(self.filename, self.event)
 
 
 class Face(BaseFace):
@@ -67,25 +124,32 @@ class Face(BaseFace):
     def pose(self):
         return self._pose
 
-    def is_valid(self, image):
-        if self.invalid == 1:
-            log.warning('Skipping INVALID %s from %s', self, image)
-            return False
+    def is_large(self):
+        return self.h > 300
 
-        # if face.blur > 0:
-        #     log.warning('Skipping BLURRED %s from %s', face, self)
-        #     return
+    def is_medium(self):
+        return 50 <= self.h <= 300
 
-        # n = max(self.w, self.h)
-        # if n < 20:
-        #     log.warning('Skipping SMALL(<20) %s from %s', self, image)
-        #     return False
+    def is_small(self):
+        return self.h < 50
 
-        return True
+    def is_partially_occluded(self):
+        """
+        A face is defined as ‘partially occluded’ if 1%-30% of the total face area is occluded.
+        :return:
+        """
+        return self.occlusion == 1
+
+    def is_heavily_occluded(self):
+        """
+        A face with occluded area over 30% is labeled as ‘heavily occluded’
+        :return:
+        """
+        return self.occlusion == 2
 
     def __str__(self):
         return 'Face(x1={}, y1={}, w={}, h={}, invalid={}, blur={})'.format(self.x1, self.y1, self.w, self.h,
-                                                                              self.invalid, self.blur)
+                                                                            self.invalid, self.blur)
 
 
 class Wider:
