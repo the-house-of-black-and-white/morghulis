@@ -1,7 +1,7 @@
 import logging
 import os
 
-from wider.model import Image, BaseFace
+from morghulis.model import Image, BaseFace
 
 log = logging.getLogger(__name__)
 
@@ -138,6 +138,6 @@ class Wider:
         return os.path.join(self.root_dir, 'WIDER_val')
 
     def download(self):
-        from wider.widerface.downloader import WiderFaceDownloader
+        from morghulis.widerface.downloader import WiderFaceDownloader
         downloader = WiderFaceDownloader(self.root_dir)
         downloader.download()

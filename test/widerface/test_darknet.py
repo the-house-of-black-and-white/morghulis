@@ -5,8 +5,8 @@ from shutil import rmtree
 
 import os
 
-from wider.widerface import Wider
-from wider.widerface.darknet_exporter import DarknetExporter
+from morghulis.widerface import Wider
+from morghulis.widerface.darknet_exporter import DarknetExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

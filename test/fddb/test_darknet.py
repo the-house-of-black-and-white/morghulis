@@ -5,8 +5,8 @@ from shutil import rmtree
 
 import os
 
-from wider.fddb import FDDB
-from wider.fddb.darknet_exporter import DarknetExporter
+from morghulis.fddb import FDDB
+from morghulis.fddb.darknet_exporter import DarknetExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

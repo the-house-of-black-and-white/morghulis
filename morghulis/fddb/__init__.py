@@ -1,7 +1,7 @@
 import logging
 import os
 
-from wider.model import BaseFace, Image
+from morghulis.model import BaseFace, Image
 
 log = logging.getLogger(__name__)
 
@@ -83,3 +83,6 @@ class FDDB:
         for annotation_file in self.annotation_files:
             for i in self._image_set(annotation_file):
                 yield i
+
+    def download(self):
+        raise NotImplementedError()

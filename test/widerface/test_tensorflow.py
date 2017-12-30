@@ -5,8 +5,8 @@ from shutil import rmtree
 
 import os
 
-from wider.widerface import Wider
-from wider.widerface.tensorflow_exporter import TensorflowExporter
+from morghulis.widerface import Wider
+from morghulis.widerface.tensorflow_exporter import TensorflowExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

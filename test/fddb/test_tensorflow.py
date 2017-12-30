@@ -5,8 +5,8 @@ from shutil import rmtree
 
 import os
 
-from wider.fddb import FDDB
-from wider.fddb.tensorflow_exporter import TensorflowExporter
+from morghulis.fddb import FDDB
+from morghulis.fddb.tensorflow_exporter import TensorflowExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

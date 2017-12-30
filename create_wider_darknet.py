@@ -28,14 +28,14 @@ def main():
     output_dir = args.output_dir
 
     if dataset == 'widerface':
-        from wider.widerface import Wider
-        from wider.widerface.darknet_exporter import DarknetExporter
+        from morghulis.widerface import Wider
+        from morghulis.widerface.darknet_exporter import DarknetExporter
         ds = Wider(data_dir)
         exporter = DarknetExporter(ds)
         exporter.export(output_dir)
     elif dataset == 'fddb':
-        from wider.fddb import FDDB
-        from wider.fddb.darknet_exporter import DarknetExporter
+        from morghulis.fddb import FDDB
+        from morghulis.fddb.darknet_exporter import DarknetExporter
         ds = FDDB(data_dir)
         exporter = DarknetExporter(ds)
         exporter.export(output_dir)

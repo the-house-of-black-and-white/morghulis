@@ -14,8 +14,8 @@ import sys
 import logging
 import tensorflow as tf
 
-from wider.widerface import Wider
-from wider.widerface.tensorflow_exporter import TensorflowExporter
+from morghulis.widerface import Wider
+from morghulis.widerface.tensorflow_exporter import TensorflowExporter
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
@@ -29,14 +29,14 @@ FLAGS = flags.FLAGS
 def main(_):
 
     if FLAGS.dataset == 'widerface':
-        from wider.widerface import Wider
-        from wider.widerface.darknet_exporter import DarknetExporter
+        from morghulis.widerface import Wider
+        from morghulis.widerface.darknet_exporter import DarknetExporter
         ds = Wider(FLAGS.data_dir)
         exporter = DarknetExporter(ds)
         exporter.export(FLAGS.output_dir)
     elif FLAGS.dataset == 'fddb':
-        from wider.fddb import FDDB
-        from wider.fddb.darknet_exporter import DarknetExporter
+        from morghulis.fddb import FDDB
+        from morghulis.fddb.darknet_exporter import DarknetExporter
         ds = FDDB(FLAGS.data_dir)
         exporter = DarknetExporter(ds)
         exporter.export(FLAGS.output_dir)

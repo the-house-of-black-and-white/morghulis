@@ -2,7 +2,7 @@
 import logging
 import lmdb
 import caffe
-from wider import ensure_dir
+from morghulis import ensure_dir
 
 log = logging.getLogger(__name__)
 

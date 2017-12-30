@@ -4,8 +4,8 @@ import unittest
 
 import os
 
-from wider.widerface import Wider
-from wider import ensure_dir
+from morghulis.widerface import Wider
+from morghulis import ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

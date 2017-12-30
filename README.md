@@ -2,8 +2,8 @@
 
 Python API for face datasets:
  
- * [WIDER FACE](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/).
- * [FDDB](http://vis-www.cs.umass.edu/fddb/).
+ * [WIDER FACE](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/)
+ * [FDDB](http://vis-www.cs.umass.edu/fddb/)
  
 ## Usage
 

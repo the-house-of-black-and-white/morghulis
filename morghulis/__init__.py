@@ -1,6 +1,6 @@
 import os
 
-from wider import Wider
+from widerface import Wider
 from fddb import FDDB
 
 

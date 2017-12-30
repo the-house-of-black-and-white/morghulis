@@ -26,10 +26,10 @@ def main():
     output_dir = args.output_dir
 
     if dataset == 'widerface':
-        from wider.widerface import Wider
+        from morghulis.widerface import Wider
         ds = Wider(output_dir)
     elif dataset == 'fddb':
-        from wider.fddb import FDDB
+        from morghulis.fddb import FDDB
         ds = FDDB(output_dir)
     else:
         logging.error('Invalid dataset name %s', dataset)
