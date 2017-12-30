@@ -1,4 +1,4 @@
-FROM housebw/morghulis
+FROM housebw/morghulis-base
 
 RUN mkdir -p /usr/src/app
 
