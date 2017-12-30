@@ -147,6 +147,22 @@ class Face(BaseFace):
         """
         return self.occlusion == 2
 
+    def has_typical_pose(self):
+        """
+        A face with occluded area over 30% is labeled as ‘heavily occluded’
+        :return:
+        """
+        return self.pose == 0
+
+    def has_atypical_pose(self):
+        """
+        Face is annotated as atypical under two conditions:
+            either the roll or pitch degree is larger than 30-degree;
+            or the yaw is larger than 90-degree
+        :return:
+        """
+        return self.pose == 1
+
     def __str__(self):
         return 'Face(x1={}, y1={}, w={}, h={}, invalid={}, blur={})'.format(self.x1, self.y1, self.w, self.h,
                                                                             self.invalid, self.blur)
