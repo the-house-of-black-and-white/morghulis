@@ -1,16 +1,15 @@
-language: python
-python:
-  - "2.7"
-# command to install dependencies
+sudo: required
+services:
+- docker
 install:
-  - pip install -r requirements.txt
-# command to run tests
+- docker login --username=$DOCKER_USER --password=$DOCKER_PASS
 script:
-  - pytest # or py.test for Python versions 3.5 and below
-
-deploy:
-  provider: pypi
-  user: ...
-  password: ...
-  on:
-    tags: true
+- docker build -t $DOCKER_IMAGE_NAME .
+- if [ ! -z "$TRAVIS_TAG" ]; then docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TRAVIS_TAG;
+  fi && docker push $DOCKER_IMAGE_NAME
+env:
+  matrix:
+  - DOCKER_IMAGE_NAME=housebw/morghulis
+  global:
+  - secure: E4NMSxPuYjwTSlh3mUIWzBD39KCHNJgPIc4X3299E5+X5sW3R2V6p/0Jw67dgmd/ruNRLH2rT+i+dytCMqAQUy0onqCnXKuGTkmjW1xdsW6EekpMZ9j5Tzj5xiulpXvgkEjBBdtqBTgRTiwl5FdcqDvW1ubCUvrdVzjuUxbvY2OR71cZyFdcs+whwtFxTypvftq0v3mq1p5K97xrCs7BBX/awKau6UyxBJ0fgDEaheqLatbVQjd7d0xt8IFOz+KrpN8ZNV93t7Flb/IBsRwTxnQSq+tqLRmQHhdsiIgk4mC8OAL9jQnn8ry3A0ZIjrnxDL+AFmb9Gh5xSjGDNNN/zo66pjL3lzhxJlvI1VLDsVcyamYPMMoGekFptGFVB5u62cX2Jz5gvIilmYXEAGN32PiTtztpSUEE4ZbDHeCvzUCRJ5+ftHG9kB4Y2iF8+lTY9A7X1RQcovrFkOULOIQXJcf6bGEO23nPoy5xM0s4H7ZqLgzkkX6NAh1j75oLz8zSYSiI6BUoUpO1hWdUVq9QRdZ6lp3EjWSFhblqT3JJBD9mhFGtGGu1/2H+aH4qIs6s5Edccjet0qa1agC35DYwnBbllsXVLm0SxZNkNhqayxW2HY8kivCwVh11YuW1QszHrbptPkcjTQRxEnOPQxj6AT/gIizeMx83C465Pg/nsXA=
+  - secure: Kavr6jFGfi3YOct++nAmfeTmFkTnwXilAbxXeQUx0gpQKbu5ocfV1Mq+Ww0lH8I2CuUxDgJCtVP1Cpg5KNlSvC1bl1dAMl+oYvTS5UIq9u0I9px/u0h6FdXoIq+mf1jOjaGbFYpJVDChDeIIcOuHe3gHquip1RdVqtYUUV5Q7C0qatmU1sGYrbtevsf4AmdrlfUj8E2zGwyT8jcqhFEi/X/ds+WaqfUS9w136zzG/nfqQW2GeXtT20YiF6BLu7GzGhvYhhRXCw7W7/bMlwLTvx/cYCU0kVSjwzRaN/7SX/Vd1G5FEiyVCxIzEnQ46v2aSTWGOCgewzSE9M2OafdVYiC/fMX7PJlE9hWhXHXamKWNmO0mamlNWXkmMvbSSY87mAzNmDrH5RWVOFgZEuTQ0Vhtn4SJ0EUlK/EcL/eSDOTVR4JLb1Iukz4AO59bRwuC61y6b5laDsCmloTcpjtwT2IB7bEot2zhvBN2HNi6Ij6+56+BnRsHgjZR8V/riwr7scgFOq4ItslRppTlWyMScR7oXGEdXfz4JUYSQJlAoILY1uFc3XpVdnnzyWuGvQ1ibbWOE54qxREFBucmBnzxC1FxZsTNXwBXlqTjMQW5D2bJOb1PEAY5XcFl/UgwZM8N0waWw0s+e3HKfvzzkzqBs2woXSTkRJXloGRoEMrnIsY=

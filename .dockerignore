@@ -1,0 +1,8 @@
+README.md
+.travis.yml
+.gitignore
+Dockerfile
+LICENSE
+test/
+.tmp/
+.idea/
