@@ -28,26 +28,16 @@ class DarknetExporter:
         images_root = os.path.join(target_dir, 'images/')
         annotations_root = os.path.join(target_dir, 'labels/')
         ensure_dir(annotations_root)
-        with open(os.path.join(target_dir, '{}.txt'.format(dataset_name)), 'w') as full, \
-                open(os.path.join(target_dir, '{}_hard.txt'.format(dataset_name)), 'w') as hard, \
-                open(os.path.join(target_dir, '{}_medium.txt'.format(dataset_name)), 'w') as medium, \
-                open(os.path.join(target_dir, '{}_easy.txt'.format(dataset_name)), 'w') as easy:
-            for i in getattr(self.widerface, '{}_set'.format(dataset_name))():
+        with open(os.path.join(target_dir, '{}.txt'.format(dataset_name)), 'w') as f:
+            for i in self.widerface.images():
                 if len(i.faces) > 0:
-                    path = i.copy_to(images_root)
-                    full.write('{}\n'.format(path))
-
-                    if i.is_hard():
-                        hard.write('{}\n'.format(path))
-                    if i.is_medium():
-                        medium.write('{}\n'.format(path))
-                    if i.is_easy():
-                        easy.write('{}\n'.format(path))
-
+                    path = i.copy_to(images_root, include_subdirs=True)
+                    f.write('{}\n'.format(path))
                     head, _ = os.path.splitext(path)
                     head, tail = os.path.split(head)
-                    annotation_file = os.path.join(annotations_root, tail + '.txt')
-                    ensure_dir(annotation_file)
+                    annotation_dir = os.path.join(annotations_root, i.subdir)
+                    ensure_dir(annotation_dir)
+                    annotation_file = os.path.join(annotation_dir, tail+'.txt')
                     with open(annotation_file, 'w') as anno:
                         for face in i.faces:
                             bbox = self._convert(i.size, face)
@@ -75,5 +65,4 @@ class DarknetExporter:
     def export(self, target_dir):
         ensure_dir(target_dir)
         self._prepare(target_dir)
-        self._export(target_dir, 'train')
-        self._export(target_dir, 'val')
+        self._export(target_dir)

@@ -34,8 +34,8 @@ def float_list_feature(value):
 
 class TensorflowExporter:
 
-    def __init__(self, wf):
-        self.widerface = wf
+    def __init__(self, ds):
+        self.dataset = ds
 
     @staticmethod
     def _convert(image):
@@ -68,8 +68,8 @@ class TensorflowExporter:
             classes_text.append('face')
             classes.append(1)
             poses.append("unspecified".encode('utf8'))
-            truncated.append(int(1) if face.occlusion > 0 else int(0))
-            difficult_obj.append(int(1) if face.blur > 0 else int(0))
+            # truncated.append(int(1) if face.occlusion > 0 else int(0))
+            difficult_obj.append(int(0))
 
         _, filename = os.path.split(image.filename)
 
@@ -96,13 +96,13 @@ class TensorflowExporter:
 
     def _export(self, target_dir, dataset_name='train'):
         log.info('Converting %s data', dataset_name)
-        output_filename = os.path.join(target_dir, 'widerface_{}.record'.format(dataset_name))
+        output_filename = os.path.join(target_dir, 'fddb_{}.record'.format(dataset_name))
         log.info('Loading {} set, it might take a while'.format(dataset_name))
-        examples = [ex for ex in getattr(self.widerface, '{}_set'.format(dataset_name))()]
-        log.info('Generating tf_record for %s set: %s example(s)',dataset_name, len(examples))
-        self.generate_tf_records(output_filename, examples)
+        examples = [ex for ex in self.dataset.images()]
+        log.info('Generating tf_record for %s set: %s example(s)', dataset_name, len(examples))
+        self._generate_tf_records(output_filename, examples)
 
-    def generate_tf_records(self, output_filename, examples):
+    def _generate_tf_records(self, output_filename, examples):
         writer = tf.python_io.TFRecordWriter(output_filename)
         for idx, example in enumerate(examples):
             if idx % 100 == 0:
@@ -117,4 +117,3 @@ class TensorflowExporter:
     def export(self, output_dir):
         ensure_dir(output_dir)
         self._export(output_dir, 'train')
-        self._export(output_dir, 'val')
