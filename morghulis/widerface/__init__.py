@@ -2,7 +2,7 @@
 import logging
 import os
 import re
-from morghulis.model import Image as BaseImage, BaseFace
+from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
 
 log = logging.getLogger(__name__)
 
@@ -173,9 +173,10 @@ class Face(BaseFace):
                                                                             self.invalid, self.blur)
 
 
-class Wider:
+class Wider(BaseDataset):
+
     def __init__(self, root_dir):
-        self.root_dir = root_dir
+        super(Wider, self).__init__(root_dir)
         self._train_gt = os.path.join(self.root_dir, 'wider_face_split', 'wider_face_train_bbx_gt.txt')
         self._train_images_dir = os.path.join(self.root_dir, 'WIDER_train', 'images')
         self._val_gt = os.path.join(self.root_dir, 'wider_face_split', 'wider_face_val_bbx_gt.txt')
@@ -228,3 +229,15 @@ class Wider:
         from morghulis.widerface.downloader import WiderFaceDownloader
         downloader = WiderFaceDownloader(self.root_dir)
         downloader.download()
+
+    def get_tensorflow_exporter(self):
+        from morghulis.widerface.tensorflow_exporter import TensorflowExporter
+        return TensorflowExporter
+
+    def get_caffe_exporter(self):
+        from morghulis.widerface.caffe_exporter import CaffeExporter
+        return CaffeExporter
+
+    def get_darknet_exporter(self):
+        from morghulis.widerface.darknet_exporter import DarknetExporter
+        return DarknetExporter

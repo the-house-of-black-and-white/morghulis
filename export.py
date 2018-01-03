@@ -38,19 +38,7 @@ def main():
     else:
         logging.error('Invalid dataset name %s', dataset)
 
-    if _format == 'tensorflow':
-        from morghulis.widerface.tensorflow_exporter import TensorflowExporter
-        exporter = TensorflowExporter(ds)
-    elif _format == 'darknet':
-        from morghulis.widerface.darknet_exporter import DarknetExporter
-        exporter = DarknetExporter(ds)
-    elif _format == 'caffe':
-        from morghulis.widerface.caffe_exporter import CaffeExporter
-        exporter = CaffeExporter(ds)
-    else:
-        logging.error('Invalid format %s', _format)
-
-    exporter.export(output_dir)
+    ds.export(output_dir, _format)
 
 
 if __name__ == '__main__':

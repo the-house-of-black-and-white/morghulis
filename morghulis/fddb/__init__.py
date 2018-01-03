@@ -1,7 +1,7 @@
 import logging
 import os
 
-from morghulis.model import BaseFace, Image
+from morghulis.model import BaseFace, Image, BaseDataset
 
 log = logging.getLogger(__name__)
 
@@ -55,8 +55,9 @@ class Face(BaseFace):
                                                                               self.invalid, self.blur)
 
 
-class FDDB:
+class FDDB(BaseDataset):
     def __init__(self, root_dir):
+        super(FDDB, self).__init__(root_dir)
         self.root_dir = root_dir
         self.images_dir = os.path.join(self.root_dir, 'originalPics')
         self.annotations_dir = os.path.join(self.root_dir, 'FDDB-folds')
@@ -86,3 +87,11 @@ class FDDB:
 
     def download(self):
         raise NotImplementedError()
+
+    def get_tensorflow_exporter(self):
+        from morghulis.fddb.tensorflow_exporter import TensorflowExporter
+        return TensorflowExporter
+
+    def get_darknet_exporter(self):
+        from morghulis.fddb.darknet_exporter import DarknetExporter
+        return DarknetExporter

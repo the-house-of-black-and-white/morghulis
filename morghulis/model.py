@@ -1,6 +1,6 @@
 import logging
 import os
-from abc import ABCMeta, abstractproperty
+from abc import ABCMeta, abstractproperty, abstractmethod
 from shutil import copy
 
 from PIL import Image as PilImage
@@ -118,3 +118,31 @@ class BaseFace:
     @property
     def invalid(self):
         return 0
+
+
+FORMATS = {
+    'tensorflow',
+    'darknet',
+    'caffe'
+}
+
+
+class BaseDataset:
+    __metaclass__ = ABCMeta
+
+    def __init__(self, data_dir):
+        self.root_dir = data_dir
+
+    def export(self, target_dir, target_format):
+        exporter_class = getattr(self, 'get_{}_exporter'.format(target_format))()
+        exporter = exporter_class(self)
+        exporter.export(target_dir)
+
+    def get_tensorflow_exporter(self):
+        raise NotImplementedError()
+
+    def get_caffe_exporter(self):
+        raise NotImplementedError()
+
+    def get_darknet_exporter(self):
+        raise NotImplementedError()
