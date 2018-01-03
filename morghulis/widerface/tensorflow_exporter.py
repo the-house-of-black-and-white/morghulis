@@ -113,23 +113,41 @@ class TensorflowExporter:
 
     def _export(self, target_dir, dataset_name='train'):
         log.info('Converting %s data', dataset_name)
-        output_filename = os.path.join(target_dir, 'widerface_{}.record'.format(dataset_name))
+        output_filename = os.path.join(target_dir, 'widerface_{}'.format(dataset_name))
         log.info('Loading {} set, it might take a while'.format(dataset_name))
         examples = [ex for ex in getattr(self.widerface, '{}_set'.format(dataset_name))()]
         log.info('Generating tf_record for %s set: %s example(s)',dataset_name, len(examples))
         self.generate_tf_records(output_filename, examples)
 
     def generate_tf_records(self, output_filename, examples):
-        writer = tf.python_io.TFRecordWriter(output_filename)
+
+        writer = tf.python_io.TFRecordWriter('{}.record'.format(output_filename))
+        easy = tf.python_io.TFRecordWriter('{}_easy.record'.format(output_filename))
+        medium = tf.python_io.TFRecordWriter('{}_medium.record'.format(output_filename))
+        hard = tf.python_io.TFRecordWriter('{}_hard.record'.format(output_filename))
+
         for idx, example in enumerate(examples):
             if idx % 100 == 0:
                 logging.info('On image %d of %d', idx, len(examples))
             try:
                 tf_example = self._convert(example)
-                writer.write(tf_example.SerializeToString())
+                serialized_example = tf_example.SerializeToString()
+                writer.write(serialized_example)
+
+                if example.is_hard():
+                    hard.write(serialized_example)
+                if example.is_medium():
+                    medium.write(serialized_example)
+                if example.is_easy():
+                    easy.write(serialized_example)
+                    
             except Exception:
                 logging.warning('Invalid example: %s, ignoring.', example.filename)
+
         writer.close()
+        easy.close()
+        medium.close()
+        hard.close()
 
     def export(self, output_dir):
         ensure_dir(output_dir)
