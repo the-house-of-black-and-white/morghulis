@@ -134,6 +134,9 @@ class BaseDataset:
         self.root_dir = data_dir
 
     def export(self, target_dir, target_format):
+        if target_format not in FORMATS:
+            raise ValueError('Format not supported. Valid choices are %s:', FORMATS)
+
         exporter_class = getattr(self, 'get_{}_exporter'.format(target_format))()
         exporter = exporter_class(self)
         exporter.export(target_dir)
@@ -145,4 +148,7 @@ class BaseDataset:
         raise NotImplementedError()
 
     def get_darknet_exporter(self):
+        raise NotImplementedError()
+
+    def download(self):
         raise NotImplementedError()

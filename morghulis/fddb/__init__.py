@@ -52,7 +52,7 @@ class Face(BaseFace):
 
     def __str__(self):
         return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h,
-                                                                              self.invalid, self.blur)
+                                                       self.invalid, self.blur)
 
 
 class FDDB(BaseDataset):
@@ -61,8 +61,15 @@ class FDDB(BaseDataset):
         self.root_dir = root_dir
         self.images_dir = os.path.join(self.root_dir, 'originalPics')
         self.annotations_dir = os.path.join(self.root_dir, 'FDDB-folds')
-        self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if
-                                 'ellipseList' in f]
+        self._initialize_dirs()
+
+    def _initialize_dirs(self):
+        if os.path.exists(self.annotations_dir):
+            self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if
+                                     'ellipseList' in f]
+        else:
+            log.warning('Annotation dir %s not found. Check the root_dir or download the dataset first',
+                        self.annotations_dir)
 
     def _image_set(self, annotation_file):
         with open(annotation_file) as f:
@@ -86,7 +93,10 @@ class FDDB(BaseDataset):
                 yield i
 
     def download(self):
-        raise NotImplementedError()
+        from morghulis.fddb.downloader import FddbDownloader
+        downloader = FddbDownloader(self.root_dir)
+        downloader.download()
+        self._initialize_dirs()
 
     def get_tensorflow_exporter(self):
         from morghulis.fddb.tensorflow_exporter import TensorflowExporter

@@ -21,14 +21,14 @@ class FddbDownloader:
     def download(self):
         ensure_dir(self.target_dir)
 
-        log.info('Downloading images...')
+        log.info('Downloading images')
         annotation_zip_file = self.download_file_from_web_server(IMAGES_URL, self.target_dir)
-        log.info('Finished download. Unzipping...')
+        log.info('Finished download. Extracting.')
         self.extract_zip_file(os.path.join(self.target_dir, annotation_zip_file), self.target_dir)
 
-        log.info('Downloading annotations...')
+        log.info('Downloading annotations')
         annotation_zip_file = self.download_file_from_web_server(ANNOTATIONS_URL, self.target_dir)
-        log.info('Finished download. Unzip0ing...')
+        log.info('Finished download. Extracting.')
         self.extract_zip_file(os.path.join(self.target_dir, annotation_zip_file), self.target_dir)
 
         log.info('done')
@@ -41,7 +41,6 @@ class FddbDownloader:
 
     def save_response_content(self, response, destination):
         CHUNK_SIZE = 32768
-
         with open(destination, "wb") as f:
             for chunk in response.iter_content(CHUNK_SIZE):
                 if chunk:  # filter out keep-alive new chunks
