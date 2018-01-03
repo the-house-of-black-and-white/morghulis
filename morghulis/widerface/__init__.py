@@ -163,6 +163,11 @@ class Face(BaseFace):
         """
         return self.pose == 1
 
+    def is_valid(self):
+        if self.invalid or self.w <= 0.0 or self.h <= 0.0:
+            return False
+        return True
+
     def __str__(self):
         return 'Face(x1={}, y1={}, w={}, h={}, invalid={}, blur={})'.format(self.x1, self.y1, self.w, self.h,
                                                                             self.invalid, self.blur)
@@ -196,10 +201,10 @@ class Wider:
                     anno = f.readline().rstrip().split()
                     log.debug(anno)
                     face = Face(anno)
-                    if not face.invalid:
+                    if face.is_valid():
                         image.add_face(face)
                     else:
-                        log.warning('Skipping INVALID %s from %s', face, image)
+                        log.debug('Skipping INVALID %s from %s', face, image)
                 filename = f.readline().rstrip()
                 yield image
 

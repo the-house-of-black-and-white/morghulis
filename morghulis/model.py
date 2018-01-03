@@ -70,6 +70,16 @@ class Image:
 
         return new_path
 
+    def link_to(self, target_dir):
+        target_dir = os.path.join(target_dir, self.subdir)
+        new_path = os.path.join(target_dir, os.path.basename(self.filename))
+        if os.path.exists(new_path):
+            log.error('%s is being overwritten.', new_path)
+            raise Exception(new_path + ' already exists')
+        ensure_dir(target_dir)
+        os.symlink(self.path, new_path)
+        return new_path
+
     def __str__(self):
         return 'Image(filename={})'.format(self.filename)
 
@@ -84,6 +94,14 @@ class BaseFace:
     @abstractproperty
     def y1(self):
         pass
+
+    @property
+    def x2(self):
+        return self.x1 + self.w
+
+    @property
+    def y2(self):
+        return self.y1 + self.h
 
     @abstractproperty
     def w(self):
