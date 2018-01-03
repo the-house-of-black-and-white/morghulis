@@ -3,6 +3,7 @@ import hashlib
 import io
 import logging
 import os
+import collections
 
 import tensorflow as tf
 from PIL import Image as PilImage
@@ -120,12 +121,12 @@ class TensorflowExporter:
         self.generate_tf_records(output_filename, examples)
 
     def generate_tf_records(self, output_filename, examples):
-
         writer = tf.python_io.TFRecordWriter('{}.record'.format(output_filename))
         easy = tf.python_io.TFRecordWriter('{}_easy.record'.format(output_filename))
         medium = tf.python_io.TFRecordWriter('{}_medium.record'.format(output_filename))
         hard = tf.python_io.TFRecordWriter('{}_hard.record'.format(output_filename))
 
+        c = collections.Counter()
         for idx, example in enumerate(examples):
             if idx % 100 == 0:
                 logging.info('On image %d of %d', idx, len(examples))
@@ -133,17 +134,21 @@ class TensorflowExporter:
                 tf_example = self._convert(example)
                 serialized_example = tf_example.SerializeToString()
                 writer.write(serialized_example)
-
+                c.update({'full': 1})
                 if example.is_hard():
                     hard.write(serialized_example)
+                    c.update({'hard': 1})
                 if example.is_medium():
                     medium.write(serialized_example)
+                    c.update({'medium': 1})
                 if example.is_easy():
                     easy.write(serialized_example)
-                    
+                    c.update({'easy': 1})
+
             except Exception:
                 logging.warning('Invalid example: %s, ignoring.', example.filename)
 
+        log.info(c)
         writer.close()
         easy.close()
         medium.close()
