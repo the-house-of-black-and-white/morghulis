@@ -51,8 +51,7 @@ class Face(BaseFace):
         return self._minor_axis_radius
 
     def __str__(self):
-        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h,
-                                                       self.invalid, self.blur)
+        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
 
 
 class FDDB(BaseDataset):
