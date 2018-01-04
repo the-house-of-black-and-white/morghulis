@@ -25,5 +25,8 @@ class AFWTests(unittest.TestCase):
             for f in i.faces:
                 log.debug(f)
 
-
+    @unittest.skip("skipping because it takes too long")
+    def test_download(self):
+        self.afw = AFW(os.path.join(TMP_DIR, 'afw_download/'))
+        self.afw.download()
 
