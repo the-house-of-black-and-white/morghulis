@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
-r"""Convert raw WIDER dataset to Darknet format for object_detection.
+r"""Convert a dataset to the specified format.
 Example usage:
-    python create_wider_darknet.py \
-        --data_dir=/home/user/wider \
-        --output_dir=/home/user/wider/tf_records
+    python export.py \
+        --dataset=afw|widerface|fddb \
+        --format=tensorflow|darknet|caffe \
+        --data_dir=/home/user/widerface/ \
+        --output_dir=/home/user/widerface/tf/
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -35,6 +37,9 @@ def main():
     elif dataset == 'fddb':
         from morghulis.fddb import FDDB
         ds = FDDB(data_dir)
+    elif dataset == 'afw':
+        from morghulis.afw import AFW
+        ds = AFW(data_dir)
     else:
         logging.error('Invalid dataset name %s', dataset)
 

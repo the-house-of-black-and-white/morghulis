@@ -71,8 +71,9 @@ class TensorflowExporter:
 
             xmin = max(0.005, (face.x1 / width))
             ymin = max(0.005, (face.y1 / height))
-            xmax = min(0.995, ((face.x1 + face.w) / width))
-            ymax = min(0.995, ((face.y1 + face.h) / height))
+            xmax = min(0.995, (face.x2 / width))
+            ymax = min(0.995, (face.y2 / height))
+
 
             if ymin > ymax or xmin > xmax:
                 log.error('Invalid face dimensions %s in %s of %s', (xmin, ymin, xmax, ymax), face, image)

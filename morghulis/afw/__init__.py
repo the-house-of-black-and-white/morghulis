@@ -5,7 +5,7 @@ import os
 import h5py
 
 from downloader import AFWDownloader
-from morghulis.model import Image as BaseImage, BaseFace
+from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class Face(BaseFace):
         self._x1 = x1
         self._y1 = y1
         self._w = w
-        self._h  = h
+        self._h = h
 
     @property
     def x1(self):
@@ -51,8 +51,9 @@ class Face(BaseFace):
         return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
 
 
-class AFW:
+class AFW(BaseDataset):
     def __init__(self, root_dir):
+        super(AFW, self).__init__(root_dir)
         self.root_dir = root_dir
         self.images_dir = os.path.join(self.root_dir, 'testimages')
         self.annotations_file = os.path.join(self.images_dir, 'anno.mat')
@@ -114,3 +115,11 @@ class AFW:
 
     def download(self):
         AFWDownloader(self.root_dir).download()
+
+    def get_tensorflow_exporter(self):
+        from morghulis.afw.tensorflow_exporter import TensorflowExporter
+        return TensorflowExporter
+
+    def get_darknet_exporter(self):
+        from morghulis.afw.darknet_exporter import DarknetExporter
+        return DarknetExporter
