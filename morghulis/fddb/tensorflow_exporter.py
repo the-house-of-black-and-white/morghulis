@@ -37,8 +37,12 @@ class TensorflowExporter:
     def __init__(self, ds):
         self.dataset = ds
 
-    @staticmethod
-    def _convert(image):
+    def _is_valid(self, face):
+        if face.invalid or face.w <= 0.0 or face.h <= 0.0:
+            return False
+        return True
+
+    def _convert(self, image):
         with tf.gfile.GFile(image.filename, 'rb') as fid:
             encoded_jpg = fid.read()
         encoded_jpg_io = io.BytesIO(encoded_jpg)
@@ -61,10 +65,23 @@ class TensorflowExporter:
         difficult_obj = []
 
         for face in image.faces:
-            xmins.append(max(0.005, (face.x1 / width)))
-            ymins.append(max(0.005, (face.y1 / height)))
-            xmaxs.append(min(0.995, (face.x1 + face.w) / width))
-            ymaxs.append(min(0.995, (face.y1 + face.h) / height))
+
+            if not self._is_valid(face):
+                continue
+
+            xmin = face.x1 / width
+            ymin = face.y1 / height
+            xmax = (face.x1 + face.w) / width
+            ymax = (face.y1 + face.h) / height
+
+            if ymin > ymax or xmin > xmax:
+                log.error('Invalid face dimensions %s in %s of %s',(xmin, ymin, xmax, ymax), face, image)
+
+            xmins.append(xmin)
+            ymins.append(ymin)
+            xmaxs.append(xmax)
+            ymaxs.append(ymax)
+
             classes_text.append('face')
             classes.append(1)
             poses.append("unspecified".encode('utf8'))

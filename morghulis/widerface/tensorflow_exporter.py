@@ -68,7 +68,7 @@ class TensorflowExporter:
         for face in image.faces:
 
             if not self._is_valid(face):
-                return
+                continue
 
             xmin = face.x1 / width
             ymin = face.y1 / height
