@@ -62,6 +62,18 @@ class FDDB(BaseDataset):
         self.annotations_dir = os.path.join(self.root_dir, 'FDDB-folds')
         self._initialize_dirs()
 
+    @property
+    def name(self):
+        return 'FDDB'
+
+    @property
+    def description(self):
+        return 'Face Detection Data Set and Benchmark'
+
+    @property
+    def url(self):
+        return 'http://vis-www.cs.umass.edu/fddb/'
+
     def _initialize_dirs(self):
         if os.path.exists(self.annotations_dir):
             self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if

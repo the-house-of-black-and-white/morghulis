@@ -133,6 +133,22 @@ class BaseDataset:
     def __init__(self, data_dir):
         self.root_dir = data_dir
 
+    @abstractproperty
+    def name(self):
+        pass
+
+    @abstractproperty
+    def description(self):
+        pass
+
+    @abstractproperty
+    def url(self):
+        pass
+
+    @abstractmethod
+    def images(self):
+        pass
+
     def export(self, target_dir, target_format):
         if target_format not in FORMATS:
             raise ValueError('Format not supported. Valid choices are %s:', FORMATS)

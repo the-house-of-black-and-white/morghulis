@@ -58,6 +58,18 @@ class AFW(BaseDataset):
         self.images_dir = os.path.join(self.root_dir, 'testimages')
         self.annotations_file = os.path.join(self.images_dir, 'anno.mat')
 
+    @property
+    def name(self):
+        return 'AFW'
+
+    @property
+    def description(self):
+        return 'Face Detection, Pose Estimation and Landmark Localization in the Wild'
+
+    @property
+    def url(self):
+        return 'https://www.ics.uci.edu/~xzhu/face/'
+
     def images(self):
         """
         Each row of "anno" corresponds to an image: 

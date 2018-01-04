@@ -19,7 +19,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', dest='dataset', action='store', required=True, help='widerface or fddb')
+    parser.add_argument('--dataset', dest='dataset', action='store', required=True, help='widerface, fddb or afw')
     parser.add_argument('--output_dir', dest='output_dir', action='store', required=True, help='')
     args = parser.parse_args()
     dataset = args.dataset
@@ -31,6 +31,9 @@ def main():
     elif dataset == 'fddb':
         from morghulis.fddb import FDDB
         ds = FDDB(output_dir)
+    elif dataset == 'afw':
+        from morghulis.afw import AFW
+        ds = AFW(output_dir)
     else:
         logging.error('Invalid dataset name %s', dataset)
         raise ValueError('Invalid dataset name %s' % dataset)

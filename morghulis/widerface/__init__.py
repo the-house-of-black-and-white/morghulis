@@ -175,6 +175,21 @@ class Face(BaseFace):
 
 class Wider(BaseDataset):
 
+    @property
+    def name(self):
+        return 'WiderFace'
+
+    @property
+    def description(self):
+        return 'WIDER FACE: A Face Detection Benchmark'
+
+    @property
+    def url(self):
+        return 'http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/'
+
+    def images(self):
+        pass
+
     def __init__(self, root_dir):
         super(Wider, self).__init__(root_dir)
         self._train_gt = os.path.join(self.root_dir, 'wider_face_split', 'wider_face_train_bbx_gt.txt')
