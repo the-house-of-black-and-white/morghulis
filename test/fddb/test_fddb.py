@@ -48,3 +48,7 @@ class FDDBTests(unittest.TestCase):
         self.assertEqual(450, image.height)
         self.assertEqual('JPEG', image.format)
 
+    @unittest.skip("skipping because it takes too long")
+    def test_download(self):
+        self.fddb = FDDB(os.path.join(TMP_DIR, 'fddb_download/'))
+        self.fddb.download()
