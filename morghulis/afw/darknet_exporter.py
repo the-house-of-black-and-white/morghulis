@@ -35,7 +35,7 @@ class DarknetExporter:
                     f.write('{}\n'.format(path))
                     head, _ = os.path.splitext(path)
                     head, tail = os.path.split(head)
-                    annotation_dir = os.path.join(annotations_root, i.subdir)
+                    annotation_dir = os.path.join(annotations_root, i.subdir) if i.subdir else annotations_root
                     ensure_dir(annotation_dir)
                     annotation_file = os.path.join(annotation_dir, tail+'.txt')
                     with open(annotation_file, 'w') as anno:

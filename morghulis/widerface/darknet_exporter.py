@@ -34,7 +34,7 @@ class DarknetExporter:
                 open(os.path.join(target_dir, '{}_easy.txt'.format(dataset_name)), 'w') as easy:
             for i in getattr(self.widerface, '{}_set'.format(dataset_name))():
                 if len(i.faces) > 0:
-                    path = i.copy_to(images_root)
+                    path = i.copy_to(images_root, include_subdirs=True)
                     full.write('{}\n'.format(path))
 
                     if i.is_hard():
@@ -46,8 +46,9 @@ class DarknetExporter:
 
                     head, _ = os.path.splitext(path)
                     head, tail = os.path.split(head)
-                    annotation_file = os.path.join(annotations_root, tail + '.txt')
-                    ensure_dir(annotation_file)
+                    annotation_dir = os.path.join(annotations_root, i.subdir) if i.subdir else annotations_root
+                    ensure_dir(annotation_dir)
+                    annotation_file = os.path.join(annotation_dir, tail+'.txt')
                     with open(annotation_file, 'w') as anno:
                         for face in i.faces:
                             bbox = self._convert(i.size, face)

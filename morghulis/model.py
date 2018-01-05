@@ -52,11 +52,11 @@ class Image:
 
     @property
     def subdir(self):
-        return os.path.dirname(self.raw_filename) + '/' if self.raw_filename else None
+        return os.path.dirname(self.raw_filename) + '/' if os.path.dirname(self.raw_filename) and self.raw_filename else None
 
     def copy_to(self, target_dir, include_subdirs=False):
 
-        if include_subdirs:
+        if include_subdirs and self.subdir:
             target_dir = os.path.join(target_dir, self.subdir)
 
         new_path = os.path.join(target_dir, os.path.basename(self.filename))
@@ -168,3 +168,44 @@ class BaseDataset:
 
     def download(self):
         raise NotImplementedError()
+
+
+class Composite(BaseDataset):
+
+    def __init__(self, datasets=None, data_dir=None):
+        super(Composite, self).__init__(data_dir)
+        self.datasets = datasets if datasets else []
+
+    def add(self, dataset):
+        self.datasets.append(dataset)
+
+    @property
+    def name(self):
+        for ds in self.datasets:
+            ds.name
+
+    @property
+    def description(self):
+        pass
+
+    @property
+    def url(self):
+        pass
+
+    def images(self):
+        for ds in self.datasets:
+            for img in ds.images():
+                yield img
+
+    def get_tensorflow_exporter(self):
+        pass
+
+    def get_caffe_exporter(self):
+        pass
+
+    def get_darknet_exporter(self):
+        pass
+
+    def download(self):
+        for ds in self.datasets:
+            ds.download()

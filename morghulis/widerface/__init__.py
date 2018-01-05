@@ -210,7 +210,7 @@ class Wider(BaseDataset):
             filename = f.readline().rstrip()
             while filename:
                 log.debug(filename)
-                image = Image(os.path.join(images_dir, filename))
+                image = Image(os.path.join(images_dir, filename), filename)
                 face_num = int(f.readline().rstrip())
                 log.debug(face_num)
                 for _ in range(face_num):

@@ -99,7 +99,8 @@ class AFW(BaseDataset):
                 rect_init = [x1, y1, width, height]
                 face = Face(rect_init)
                 image.add_face(face)
-                yield image
+
+            yield image
                 # getting pose [yaw, pitch, roll]
                 # obj = f[f[f_base[2][indx]][face_indx][0]]
                 # yaw = float(obj[0])
