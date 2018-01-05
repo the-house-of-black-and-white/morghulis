@@ -6,3 +6,5 @@ LICENSE
 test/
 .tmp/
 .idea/
+.dockerignore
+.git/
