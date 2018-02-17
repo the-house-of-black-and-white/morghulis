@@ -4,7 +4,7 @@ r"""Convert a dataset to the specified format.
 Example usage:
     python export.py \
         --dataset=afw|widerface|fddb \
-        --format=tensorflow|darknet|caffe \
+        --format=tensorflow|darknet|caffe|coco \
         --data_dir=/home/user/widerface/ \
         --output_dir=/home/user/widerface/tf/
 """
@@ -22,7 +22,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', dest='dataset', action='store', required=True, help='widerface or fddb')
-    parser.add_argument('--format', dest='format', action='store', required=True, help='darknet, tensorflow or caffe')
+    parser.add_argument('--format', dest='format', action='store', required=True, help='darknet, tensorflow, caffe or coco')
     parser.add_argument('--data_dir', dest='data_dir', action='store', required=True, help='')
     parser.add_argument('--output_dir', dest='output_dir', action='store', required=True, help='')
     args = parser.parse_args()
