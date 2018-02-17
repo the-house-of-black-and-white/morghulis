@@ -78,6 +78,8 @@ class FDDB(BaseDataset):
         if os.path.exists(self.annotations_dir):
             self.annotation_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if
                                      'ellipseList' in f]
+            self.fold_files = [os.path.join(self.annotations_dir, f) for f in os.listdir(self.annotations_dir) if
+                                     'ellipseList' not in f]
         else:
             log.warning('Annotation dir %s not found. Check the root_dir or download the dataset first',
                         self.annotations_dir)
@@ -102,6 +104,10 @@ class FDDB(BaseDataset):
         for annotation_file in self.annotation_files:
             for i in self._image_set(annotation_file):
                 yield i
+
+    def folds(self):
+        for fold_file in self.fold_files:
+            yield fold_file[-6:-4], fold_file
 
     def download(self):
         from morghulis.fddb.downloader import FddbDownloader

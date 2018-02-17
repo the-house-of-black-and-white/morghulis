@@ -60,6 +60,8 @@ class DarknetExporter:
         ensure_dir(os.path.join(target_dir, 'images/'))
         ensure_dir(os.path.join(target_dir, 'labels/'))
         ensure_dir(os.path.join(target_dir, 'backup/'))
+        ensure_dir(os.path.join(target_dir, 'results/'))
+
 
         log.info('Creating obj.names')
         with open(os.path.join(target_dir, 'obj.names'), 'w') as obj_names:

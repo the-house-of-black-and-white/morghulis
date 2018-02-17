@@ -59,6 +59,9 @@ class Image(BaseImage):
     def is_medium(self):
         return self.event.category in MEDIUM_SUBSET_CATEGORIES
 
+    def category_dir(self):
+        return '{}--{}'.format(self.event.id, self.event.category.replace(' ', '_'))
+
     def __str__(self):
         return 'Image(filename={}, event={})'.format(self.filename, self.event)
 
@@ -256,3 +259,7 @@ class Wider(BaseDataset):
     def get_darknet_exporter(self):
         from morghulis.widerface.darknet_exporter import DarknetExporter
         return DarknetExporter
+
+    def get_coco_exporter(self):
+        from morghulis.widerface.coco_exporter import CocoExporter
+        return CocoExporter

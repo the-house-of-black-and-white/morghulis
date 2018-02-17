@@ -111,6 +111,14 @@ class BaseFace:
     def h(self):
         pass
 
+    @property
+    def area(self):
+        return self.w * self.h
+
+    @property
+    def poly(self):
+        return [self.x1, self.y1, self.x1, self.y2, self.x2, self.y2, self.x2, self.y1]
+
     @abstractproperty
     def center(self):
         pass
@@ -123,7 +131,8 @@ class BaseFace:
 FORMATS = {
     'tensorflow',
     'darknet',
-    'caffe'
+    'caffe',
+    'coco'
 }
 
 
@@ -164,6 +173,9 @@ class BaseDataset:
         raise NotImplementedError()
 
     def get_darknet_exporter(self):
+        raise NotImplementedError()
+
+    def get_coco_exporter(self):
         raise NotImplementedError()
 
     def download(self):
