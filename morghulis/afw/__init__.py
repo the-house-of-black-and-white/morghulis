@@ -136,3 +136,7 @@ class AFW(BaseDataset):
     def get_darknet_exporter(self):
         from morghulis.afw.darknet_exporter import DarknetExporter
         return DarknetExporter
+
+    def get_coco_exporter(self):
+        from morghulis.afw.coco_exporter import CocoExporter
+        return CocoExporter

@@ -180,7 +180,7 @@ class Wider(BaseDataset):
 
     @property
     def name(self):
-        return 'WiderFace'
+        return 'widerface'
 
     @property
     def description(self):

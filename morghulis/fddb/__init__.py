@@ -122,3 +122,7 @@ class FDDB(BaseDataset):
     def get_darknet_exporter(self):
         from morghulis.fddb.darknet_exporter import DarknetExporter
         return DarknetExporter
+
+    def get_coco_exporter(self):
+        from morghulis.fddb.coco_exporter import CocoExporter
+        return CocoExporter
