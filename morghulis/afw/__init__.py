@@ -4,7 +4,7 @@ import os
 
 import h5py
 
-from downloader import AFWDownloader
+from .downloader import AFWDownloader
 from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
 
 log = logging.getLogger(__name__)

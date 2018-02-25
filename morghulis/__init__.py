@@ -1,8 +1,8 @@
 import os
 
-from widerface import Wider
-from fddb import FDDB
-from afw import AFW
+from .widerface import Wider
+from .fddb import FDDB
+from .afw import AFW
 
 
 def ensure_dir(file_path):
