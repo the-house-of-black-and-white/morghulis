@@ -193,6 +193,13 @@ class Wider(BaseDataset):
     def images(self):
         pass
 
+    def events(self):
+        evts = dict()
+        for subdir, dirs, files in os.walk(self._train_images_dir):
+            for d in dirs:
+                evts[d.split('--')[0]] = d
+        return evts
+
     def __init__(self, root_dir):
         super(Wider, self).__init__(root_dir)
         self._train_gt = os.path.join(self.root_dir, 'wider_face_split', 'wider_face_train_bbx_gt.txt')

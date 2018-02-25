@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     # Application name:
-    name="pyWiderFace",
+    name="morghulis",
 
     # Version number (initial):
     version="0.1.0",
@@ -12,13 +12,13 @@ setup(
     author_email="fabio.uechi@gmail.com",
 
     # Packages
-    packages=["wider"],
+    packages=["morghulis"],
 
     # Include additional files into the package
     include_package_data=True,
 
     # Details
-    url="http://pypi.python.org/pypi/pyWiderFace/",
+    url="http://pypi.python.org/pypi/morghulis/",
 
     #
     # license="LICENSE.txt",
@@ -29,4 +29,9 @@ setup(
     # Dependent packages (distributions)
     install_requires=[
     ],
+
+    extras_require={
+        'tensorflow_export': ["tensorflow"],
+        'caffe_export': ["caffe"],
+    }
 )

@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 TRAIN_DATA = 'WIDER_train.zip', '0B6eKvaijfFUDQUUwd21EckhUbWs'
 VAL_DATA = 'WIDER_val.zip', '0B6eKvaijfFUDd3dIRmpvSk8tLUk'
 ANNOTATIONS_URL = 'http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/support/bbx_annotation/wider_face_split.zip'
+EVAL_TOOLS_URL = 'http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/support/eval_script/eval_tools.zip'
 
 
 class WiderFaceDownloader:
@@ -38,6 +39,11 @@ class WiderFaceDownloader:
         annotation_zip_file = self.download_file_from_web_server(ANNOTATIONS_URL, self.target_dir)
         log.info('Finished download. Unziping...')
         self.extract_zip_file(os.path.join(self.target_dir, annotation_zip_file), self.target_dir)
+
+        log.info('downloading eval tools...')
+        tools_zip_file = self.download_file_from_web_server(EVAL_TOOLS_URL, self.target_dir)
+        log.info('Finished download. Unziping...')
+        self.extract_zip_file(os.path.join(self.target_dir, tools_zip_file), self.target_dir)
 
         log.info('done')
 
