@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from distutils.core import setup
 
 setup(
@@ -12,7 +14,9 @@ setup(
     author_email="fabio.uechi@gmail.com",
 
     # Packages
-    packages=["morghulis"],
+    packages=["morghulis", "morghulis.widerface", "morghulis.afw", "morghulis.exporters", "morghulis.fddb"],
+
+    # package_dir={'': 'lib'},
 
     # Include additional files into the package
     include_package_data=True,
