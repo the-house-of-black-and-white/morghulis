@@ -32,6 +32,7 @@ setup(
 
     # Dependent packages (distributions)
     install_requires=[
+        'requests'
     ],
 
     extras_require={
