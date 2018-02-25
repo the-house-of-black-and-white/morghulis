@@ -8,7 +8,7 @@ import collections
 import tensorflow as tf
 from PIL import Image as PilImage
 
-from morghulis import ensure_dir
+from morghulis.os_utils import ensure_dir
 
 log = logging.getLogger(__name__)
 

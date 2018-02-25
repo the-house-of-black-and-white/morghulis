@@ -4,7 +4,8 @@ import unittest
 
 import os
 
-from morghulis import AFW, ensure_dir
+from morghulis import AFW
+from morghulis.os_utils import ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)

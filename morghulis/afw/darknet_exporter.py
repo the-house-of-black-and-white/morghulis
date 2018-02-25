@@ -2,7 +2,7 @@
 import logging
 import os
 
-from morghulis import ensure_dir
+from morghulis.os_utils import ensure_dir
 
 log = logging.getLogger(__name__)
 

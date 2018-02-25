@@ -5,7 +5,7 @@ from shutil import copy
 
 from PIL import Image as PilImage
 
-from os_utils import ensure_dir
+from .os_utils import ensure_dir
 
 log = logging.getLogger(__name__)
 

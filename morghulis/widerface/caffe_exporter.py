@@ -7,7 +7,7 @@ import caffe
 import lmdb
 import numpy as np
 
-from morghulis import ensure_dir
+from morghulis.os_utils import ensure_dir
 
 log = logging.getLogger(__name__)
 
