@@ -62,3 +62,4 @@ class WiderTests(unittest.TestCase):
         self.assertEqual(6, len(events))
         self.assertEqual('26--Soldier_Drilling', events['26'])
         self.assertEqual('12--Group', events['12'])
+

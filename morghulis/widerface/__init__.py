@@ -1,4 +1,10 @@
 # coding=utf-8
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import logging
 import os
 import re
@@ -24,7 +30,7 @@ EASY_SUBSET_CATEGORIES = {'Gymnastics', 'Handshaking', 'Waiter Waitress', 'Press
                           'Dancing', 'Swimming', 'Family Group', 'Balloonist', 'Dresses', 'Couple', 'Jockey', 'Tennis',
                           'Spa', 'Surgeons'}
 
-CATEGORY_RE = re.compile(r".*/(\d+)--(\w+)/.*")
+CATEGORY_RE = re.compile(r".*/(\d+)--([a-zA-Z0-9_-]+)/.*")
 
 
 class Event:
@@ -207,6 +213,50 @@ class Wider(BaseDataset):
         self._val_gt = os.path.join(self.root_dir, 'wider_face_split', 'wider_face_val_bbx_gt.txt')
         self._val_images_dir = os.path.join(self.root_dir, 'WIDER_val', 'images')
 
+    def extract2(self, mat_file):
+        import scipy.io
+        import numpy as np
+
+        event_num = 61
+        f = scipy.io.loadmat(self.root_dir + 'eval_tools/ground_truth/' + mat_file)
+        subset = mat_file.split('_')[-1].replace('.mat', '')
+        ds = []
+        has_gt = 'gt_list' in f
+
+        for i in range(event_num):
+            img_list = f['file_list'][i][0]
+            gt_bbx_list = f['face_bbx_list'][i][0]
+            if has_gt:
+                sub_gt_list = f['gt_list'][i][0]
+            event = str(f['event_list'][i][0][0])
+
+            print('Processing event ({}) {} with {} images'.format(i, event, len(img_list)))
+            for j in range(len(img_list)):
+                gt_bbx = gt_bbx_list[j][0]
+
+                filename = str('WIDER_%s/images/' % subset + event + '/' + img_list[j][0][0] + '.jpg').encode('ascii',
+                                                                                                              'ignore')
+                if len(gt_bbx) == 0:
+                    continue
+
+                boxes = []
+                if has_gt:
+                    keep_index = sub_gt_list[j][0]
+
+                    for idx, val in enumerate(gt_bbx):
+                        if idx + 1 in keep_index:
+                            boxes.append(val)
+                    print('Got {} boxes. Considered {}'.format(len(gt_bbx), len(boxes)))
+
+                    if len(boxes) == 0:
+                        print('Discarding {}'.format(filename))
+                        continue
+                else:
+                    boxes = gt_bbx
+
+                ds.append((filename, np.asarray(boxes)))
+        return ds
+
     @staticmethod
     def _image_set(gt_txt, images_dir):
         """
@@ -218,6 +268,7 @@ class Wider(BaseDataset):
         """
         with open(gt_txt) as f:
             filename = f.readline().rstrip()
+            total = 1
             while filename:
                 log.debug(filename)
                 image = Image(os.path.join(images_dir, filename), filename)
@@ -232,6 +283,7 @@ class Wider(BaseDataset):
                     else:
                         log.debug('Skipping INVALID %s from %s', face, image)
                 filename = f.readline().rstrip()
+                total += 1
                 yield image
 
     def train_set(self):

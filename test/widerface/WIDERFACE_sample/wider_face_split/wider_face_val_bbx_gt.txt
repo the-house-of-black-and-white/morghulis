@@ -133,9 +133,9 @@
 434 268 68 96 1 0 0 0 0 0 
 556 218 70 94 1 0 0 0 0 0 
 792 256 74 82 1 0 0 0 0 0
-14--Traffic/14_Traffic_Traffic_14_850.jpg
+59--people--driving--car/59_peopledrivingcar_peopledrivingcar_59_595.jpg
 1
-594 144 86 122 0 0 0 0 0 0
+388 65 38 37 2 0 0 0 1 0
 9--Press_Conference/9_Press_Conference_Press_Conference_9_183.jpg
 3
 218 190 112 160 0 0 0 0 0 0 
