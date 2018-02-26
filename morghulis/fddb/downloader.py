@@ -1,11 +1,8 @@
 import logging
-
-import requests
 import os
-import tarfile
 
+from morghulis.downloader import BaseDownloader
 from morghulis.os_utils import ensure_dir
-
 
 log = logging.getLogger(__name__)
 
@@ -13,10 +10,10 @@ IMAGES_URL = 'http://tamaraberg.com/faceDataset/originalPics.tar.gz'
 ANNOTATIONS_URL = 'http://vis-www.cs.umass.edu/fddb/FDDB-folds.tgz'
 
 
-class FddbDownloader:
+class FddbDownloader(BaseDownloader):
 
     def __init__(self, target_dir):
-        self.target_dir = target_dir
+        super(FddbDownloader, self).__init__(target_dir)
 
     def download(self):
         ensure_dir(self.target_dir)
@@ -33,25 +30,3 @@ class FddbDownloader:
 
         log.info('done')
 
-    def download_file_from_web_server(self, url, destination):
-        local_filename = url.split('/')[-1]
-        target_file = os.path.join(destination, local_filename)
-        if not os.path.exists(target_file):
-            response = requests.get(url, stream=True)
-            self.save_response_content(response, target_file)
-
-        return local_filename
-
-    @staticmethod
-    def save_response_content(response, destination):
-        CHUNK_SIZE = 32768
-        with open(destination, "wb") as f:
-            for chunk in response.iter_content(CHUNK_SIZE):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
-
-    @staticmethod
-    def extract_tar_file(zip_file_name, destination):
-        zip_ref = tarfile.TarFile.open(zip_file_name, 'r')
-        zip_ref.extractall(destination)
-        zip_ref.close()

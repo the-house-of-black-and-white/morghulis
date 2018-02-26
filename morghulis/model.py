@@ -7,6 +7,12 @@ from PIL import Image as PilImage
 
 from .os_utils import ensure_dir
 
+try:
+    import numpy as np
+    import cv2
+except:
+    logging.warning('OpenCV not found')
+
 log = logging.getLogger(__name__)
 
 
@@ -79,6 +85,16 @@ class Image:
         ensure_dir(target_dir)
         os.symlink(self.path, new_path)
         return new_path
+
+    def image_as_nparray(self):
+        return np.array(self.image)
+
+    def draw_faces(self, image=None, color=(0, 0, 255), thickness=3):
+        if image is None:
+            image = self.image_as_nparray()
+        for f in self.faces:
+            cv2.rectangle(image, (int(f.x1), int(f.y1)), (int(f.x2), int(f.y2)), color, thickness)
+        return image
 
     def __str__(self):
         return 'Image(filename={})'.format(self.filename)
@@ -178,6 +194,7 @@ class BaseDataset:
     def get_coco_exporter(self):
         raise NotImplementedError()
 
+    @abstractmethod
     def download(self):
         raise NotImplementedError()
 
