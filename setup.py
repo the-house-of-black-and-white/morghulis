@@ -14,7 +14,14 @@ setup(
     author_email="fabio.uechi@gmail.com",
 
     # Packages
-    packages=["morghulis", "morghulis.widerface", "morghulis.afw", "morghulis.exporters", "morghulis.fddb"],
+    packages=[
+        "morghulis",
+        "morghulis.widerface",
+        "morghulis.afw",
+        "morghulis.exporters",
+        "morghulis.fddb",
+        "morghulis.caltech_faces"
+    ],
 
     # package_dir={'': 'lib'},
 
