@@ -34,6 +34,9 @@ def main():
     elif dataset == 'afw':
         from morghulis.afw import AFW
         ds = AFW(output_dir)
+    elif dataset == 'pascal_faces':
+        from morghulis.pascal_faces import PascalFaces
+        ds = PascalFaces(output_dir)
     else:
         logging.error('Invalid dataset name %s', dataset)
         raise ValueError('Invalid dataset name %s' % dataset)
