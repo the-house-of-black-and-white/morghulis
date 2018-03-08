@@ -126,7 +126,6 @@ This dataset contains 1335 faces from 851 images with large appearance variation
                     annotation = os.path.join(self._annotations_dir, image_id + '.xml')
                     yield self._xml_to_image(annotation)
 
-
     def get_tensorflow_exporter(self):
         pass
 
@@ -140,4 +139,6 @@ This dataset contains 1335 faces from 851 images with large appearance variation
         pass
 
     def download(self):
-        pass
+        from morghulis.pascal_faces.downloader import PascalFacesDownloader
+        downloader = PascalFacesDownloader(self.root_dir)
+        downloader.download()
