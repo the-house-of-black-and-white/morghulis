@@ -5,6 +5,7 @@ Python API for face detection datasets:
  * [WIDER FACE](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/)
  * [FDDB](http://vis-www.cs.umass.edu/fddb/)
  * [AFW](https://www.ics.uci.edu/~xzhu/face/)
+ * [PASCAL faces](https://www.ics.uci.edu/~xzhu/face/)
  
 ## Usage
 
@@ -38,12 +39,6 @@ docker run --rm -it \
     
 ```
 
-	modified:   README.md
-	modified:   morghulis/fddb/__init__.py
-	modified:   morghulis/model.py
-	modified:   morghulis/widerface/__init__.py
-	modified:   morghulis/widerface/darknet_exporter.py
-
 ### API
 
 Use a `Wider` or `FDDB` dataset object to download and export to different formats:
@@ -51,22 +46,17 @@ Use a `Wider` or `FDDB` dataset object to download and export to different forma
 ```python
 data_dir = '/datasets/WIDER'
 
-ds = Wider(data_dir) 
-
-# ds = FDDB(data_dir)
+ds = Wider(data_dir) # FDDB(data_dir)
 
 # downloads train, validation sets and annotations
 ds.download()
 
 # generate darknet (YOLO)
-darknet = DarknetExporter(ds)
-darknet.export(darknet_output_dir)
+ds.export(darknet_output_dir, target_format='darknet')
 
 # generate tensorflow tf records
-tensorflow = TensorflowExporter(ds)
-tensorflow.export(tf_output_dir)
+ds.export(tf_output_dir, target_format='tensorflow')
 
-# generates LMDB files for caffe
-caffe = CaffeExporter(ds)
-exporter.export(caffe_output_dir)
+# generates COCO json file (useful for Detectron)
+ds.export(coco_output_dir, target_format='coco')
 ```
