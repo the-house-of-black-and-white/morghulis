@@ -127,7 +127,8 @@ This dataset contains 1335 faces from 851 images with large appearance variation
                     yield self._xml_to_image(annotation)
 
     def get_tensorflow_exporter(self):
-        pass
+        from morghulis.exporters.tf import TensorflowExporter
+        return TensorflowExporter
 
     def get_caffe_exporter(self):
         pass
@@ -136,7 +137,8 @@ This dataset contains 1335 faces from 851 images with large appearance variation
         pass
 
     def get_coco_exporter(self):
-        pass
+        from morghulis.exporters.coco import BaseCocoExporter
+        return BaseCocoExporter
 
     def download(self):
         from morghulis.pascal_faces.downloader import PascalFacesDownloader
