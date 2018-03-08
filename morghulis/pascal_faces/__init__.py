@@ -131,10 +131,10 @@ This dataset contains 1335 faces from 851 images with large appearance variation
         return TensorflowExporter
 
     def get_caffe_exporter(self):
-        pass
+        raise NotImplementedError()
 
     def get_darknet_exporter(self):
-        pass
+        raise NotImplementedError()
 
     def get_coco_exporter(self):
         from morghulis.exporters.coco import BaseCocoExporter
