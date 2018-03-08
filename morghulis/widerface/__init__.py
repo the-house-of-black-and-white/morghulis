@@ -172,6 +172,15 @@ class Face(BaseFace):
         """
         return self.pose == 1
 
+    def is_hard_df(self):
+        pass
+
+    def is_easy_df(self):
+        pass
+
+    def is_medium_df(self):
+        pass
+
     def is_valid(self):
         if self.invalid or self.w <= 0.0 or self.h <= 0.0:
             return False
