@@ -18,6 +18,7 @@ setup(
         "morghulis",
         "morghulis.widerface",
         "morghulis.afw",
+        "morghulis.pascal_faces",
         "morghulis.exporters",
         "morghulis.fddb",
         "morghulis.caltech_faces"
