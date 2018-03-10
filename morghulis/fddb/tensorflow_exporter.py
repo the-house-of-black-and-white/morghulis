@@ -89,7 +89,7 @@ class TensorflowExporter:
             # truncated.append(int(1) if face.occlusion > 0 else int(0))
             difficult_obj.append(int(0))
 
-        _, filename = os.path.split(image.filename)
+        filename = image.raw_filename
 
         feature_dict = {
             'image/height': int64_feature(height),
