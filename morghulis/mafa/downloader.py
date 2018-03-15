@@ -1,0 +1,36 @@
+import logging
+import os
+
+from morghulis.downloader import BaseDownloader
+from morghulis.os_utils import ensure_dir
+
+log = logging.getLogger(__name__)
+
+
+
+TRAIN_DATA = 'train-images.zip', '0B6eKvaijfFUDQUUwd21EckhUbWs'
+TRAIN_ANNO = 'MAFA-Label-Train.zip', '0B6eKvaijfFUDQUUwd21EckhUbWs'
+
+TEST_DATA = 'test-images.zip', '1jJHdmmscqxvNQ2dxKUrLaHqW3w1Yo_9S'
+TEST_ANNO = 'MAFA-Label-Test.zip', '1uN0a4P0wAFwJLid_r7VHFs0KUcizIRGN'
+
+
+class MafaDownloader(BaseDownloader):
+
+    def __init__(self, target_dir):
+        super(MafaDownloader, self).__init__(target_dir)
+
+    def download(self):
+        ensure_dir(self.target_dir)
+
+        log.info('downloading the test images from google drive...')
+        test_zip = os.path.join(self.target_dir, TEST_DATA[0])
+        self.download_file_from_google_drive(TEST_DATA[1], test_zip)
+        self.extract_zip_file(test_zip, self.target_dir)
+
+        log.info('downloading the test annotations from google drive...')
+        test_zip = os.path.join(self.target_dir, TEST_ANNO[0])
+        self.download_file_from_google_drive(TEST_ANNO[1], test_zip)
+        self.extract_zip_file(test_zip, self.target_dir)
+
+        log.info('done')
