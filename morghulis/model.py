@@ -174,6 +174,18 @@ class BaseDataset:
     def images(self):
         pass
 
+    # @abstractmethod
+    # def train_set(self):
+    #     pass
+    #
+    # @abstractmethod
+    # def val_set(self):
+    #     pass
+    #
+    # @abstractmethod
+    # def trainval_set(self):
+    #     pass
+
     def export(self, target_dir, target_format):
         if target_format not in FORMATS:
             raise ValueError('Format not supported. Valid choices are %s:', FORMATS)

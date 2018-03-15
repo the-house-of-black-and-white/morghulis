@@ -89,7 +89,7 @@ class TensorflowExporter:
             truncated.append(int(1) if face.occlusion > 0 else int(0))
             difficult_obj.append(int(1) if face.blur > 0 else int(0))
 
-        _, filename = os.path.split(image.filename)
+        filename = image.raw_filename
 
         feature_dict = {
             'image/height': int64_feature(height),
@@ -122,9 +122,6 @@ class TensorflowExporter:
 
     def generate_tf_records(self, output_filename, examples):
         writer = tf.python_io.TFRecordWriter('{}.record'.format(output_filename))
-        # easy = tf.python_io.TFRecordWriter('{}_easy.record'.format(output_filename))
-        # medium = tf.python_io.TFRecordWriter('{}_medium.record'.format(output_filename))
-        # hard = tf.python_io.TFRecordWriter('{}_hard.record'.format(output_filename))
 
         c = collections.Counter()
         for idx, example in enumerate(examples):
@@ -135,24 +132,11 @@ class TensorflowExporter:
                 serialized_example = tf_example.SerializeToString()
                 writer.write(serialized_example)
                 c.update({'full': 1})
-                # if example.is_hard():
-                #     hard.write(serialized_example)
-                #     c.update({'hard': 1})
-                # if example.is_medium():
-                #     medium.write(serialized_example)
-                #     c.update({'medium': 1})
-                # if example.is_easy():
-                #     easy.write(serialized_example)
-                #     c.update({'easy': 1})
-
             except Exception:
                 logging.warning('Invalid example: %s, ignoring.', example.filename)
 
         log.info(c)
         writer.close()
-        # easy.close()
-        # medium.close()
-        # hard.close()
 
     def export(self, output_dir):
         ensure_dir(output_dir)
