@@ -206,7 +206,8 @@ class Wider(BaseDataset):
         return 'http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/'
 
     def images(self):
-        pass
+        for i in self.train_set():
+            yield i
 
     def events(self):
         evts = dict()

@@ -216,14 +216,46 @@ class BaseDataset:
 
     def browse(self):
         images = [i for i in self.images()]
-        count = len(images)
+        ds_name = self.name
+        count = len(images) - 1
         current_index = 0
 
+        cv2.namedWindow(ds_name, cv2.WINDOW_NORMAL)
+
+        def update():
+            sample = images[current_index]
+            img = sample.draw_faces()
+            log.info('Showing {}'.format(sample))
+            cv2.imshow(ds_name, cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+
+        update()
+
         while True:
-            img = images[current_index].draw_faces()
-            cv2.imshow(img)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            key = cv2.waitKey(0)
+            if key & 0xFF == ord('q'):
                 break
+            elif key & 0xFF == ord('a'):
+                current_index = current_index - 1 if current_index > 0 else count
+                update()
+            elif key & 0xFF == ord('d'):
+                current_index = current_index + 1 if current_index < count else 0
+                update()
+            elif key & 0xFF == ord('w'):
+                target_index = current_index + 10
+                if target_index > count:
+                    current_index = target_index - count
+                else:
+                    current_index = target_index
+                update()
+            elif key & 0xFF == ord('s'):
+                target_index = current_index - 10
+                if target_index < 0:
+                    current_index = count + target_index
+                else:
+                    current_index = target_index
+                update()
+
+        cv2.destroyAllWindows()
 
 
 class Composite(BaseDataset):
