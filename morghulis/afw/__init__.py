@@ -82,12 +82,12 @@ class AFW(BaseDataset):
         """
         f = h5py.File(self.annotations_file)
         f_base = f[u'anno']
-        for indx in xrange(len(f_base[0])):
+        for indx in range(len(f_base[0])):
             # getting the name of the image
             obj = f[f_base[0][indx]]
             name = ''.join(chr(i) for i in obj[:])
             image = Image(os.path.join(self.images_dir, name), raw_filename=name)
-            for face_indx in xrange(len(f[f[u'anno'][1][indx]])):
+            for face_indx in range(len(f[f[u'anno'][1][indx]])):
                 # getting the bounding boxes of the face [x1, y1, x2, y2]. (upper left corner and lower right corner)
                 obj = f[f[f_base[1][indx]][face_indx][0]]
                 x1 = float(obj[0, 0])
@@ -101,30 +101,6 @@ class AFW(BaseDataset):
                 image.add_face(face)
 
             yield image
-                # getting pose [yaw, pitch, roll]
-                # obj = f[f[f_base[2][indx]][face_indx][0]]
-                # yaw = float(obj[0])
-                # pitch = float(obj[1])
-                # roll = float(obj[2])
-
-                # getting 6 landmarks. (left eye, right eye, nose, left mouth, mouth center, mouth right)
-                # obj = f[f[f_base[3][indx]][face_indx][0]]
-                # l_eye_x = float(obj[0, 0])
-                # r_eye_x = float(obj[0, 1])
-                # nose_x = float(obj[0, 2])
-                # l_mouth_x = float(obj[0, 3])
-                # c_mouth_x = float(obj[0, 4])
-                # r_mouth_x = float(obj[0, 5])
-                #
-                # l_eye_y = float(obj[1, 0])
-                # r_eye_y = float(obj[1, 1])
-                # nose_y = float(obj[1, 2])
-                # l_mouth_y = float(obj[1, 3])
-                # c_mouth_y = float(obj[1, 4])
-                # r_mouth_y = float(obj[1, 5])
-                #
-                # kpts = [l_eye_x, l_eye_y, r_eye_x, r_eye_y, nose_x, nose_y, l_mouth_x, l_mouth_y, c_mouth_x, c_mouth_y,
-                #         r_mouth_x, r_mouth_y]
 
     def download(self):
         AFWDownloader(self.root_dir).download()
@@ -138,5 +114,5 @@ class AFW(BaseDataset):
         return DarknetExporter
 
     def get_coco_exporter(self):
-        from morghulis.afw.coco_exporter import CocoExporter
-        return CocoExporter
+        from morghulis.exporters.coco import BaseCocoExporter
+        return BaseCocoExporter

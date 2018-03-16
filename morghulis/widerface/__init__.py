@@ -303,6 +303,15 @@ class Wider(BaseDataset):
         for i in self._image_set(self._val_gt, self._val_images_dir):
             yield i
 
+    def trainval_set(self):
+        for i in self.train_set():
+            yield i
+        for i in self.val_set():
+            yield i
+
+    def test_set(self):
+        raise NotImplementedError()
+
     @property
     def train_dir(self):
         return os.path.join(self.root_dir, 'WIDER_train')

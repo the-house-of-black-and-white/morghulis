@@ -4,7 +4,7 @@ import unittest
 
 import os
 
-from morghulis import FDDB
+from morghulis.fddb import FDDB
 from morghulis.os_utils import ensure_dir
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)

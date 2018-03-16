@@ -4,7 +4,7 @@ import sys
 import unittest
 from shutil import rmtree
 
-from morghulis import FDDB
+from morghulis.fddb import FDDB
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)

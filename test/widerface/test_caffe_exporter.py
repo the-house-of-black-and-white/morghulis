@@ -1,12 +1,11 @@
 import logging
+import os
 import sys
 import unittest
 from shutil import rmtree
 
-import os
-import numpy as np
-import lmdb
 import caffe
+import lmdb
 
 from morghulis.widerface import Wider
 from morghulis.widerface.caffe_exporter import CaffeExporter

@@ -21,6 +21,7 @@ setup(
         "morghulis.pascal_faces",
         "morghulis.exporters",
         "morghulis.fddb",
+        "morghulis.mafa",
         "morghulis.caltech_faces"
     ],
 

@@ -58,7 +58,8 @@ class Image:
 
     @property
     def subdir(self):
-        return os.path.dirname(self.raw_filename) + '/' if os.path.dirname(self.raw_filename) and self.raw_filename else None
+        return os.path.dirname(self.raw_filename) + '/' if os.path.dirname(
+            self.raw_filename) and self.raw_filename else None
 
     def copy_to(self, target_dir, include_subdirs=False):
 
@@ -98,6 +99,9 @@ class Image:
 
     def __str__(self):
         return 'Image(filename={})'.format(self.filename)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class BaseFace:
@@ -174,17 +178,17 @@ class BaseDataset:
     def images(self):
         pass
 
-    # @abstractmethod
-    # def train_set(self):
-    #     pass
-    #
-    # @abstractmethod
-    # def val_set(self):
-    #     pass
-    #
-    # @abstractmethod
-    # def trainval_set(self):
-    #     pass
+    def train_set(self):
+        raise NotImplementedError()
+
+    def val_set(self):
+        raise NotImplementedError()
+
+    def trainval_set(self):
+        raise NotImplementedError()
+
+    def test_set(self):
+        raise NotImplementedError()
 
     def export(self, target_dir, target_format):
         if target_format not in FORMATS:
@@ -209,6 +213,17 @@ class BaseDataset:
     @abstractmethod
     def download(self):
         raise NotImplementedError()
+
+    def browse(self):
+        images = [i for i in self.images()]
+        count = len(images)
+        current_index = 0
+
+        while True:
+            img = images[current_index].draw_faces()
+            cv2.imshow(img)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
 
 class Composite(BaseDataset):
@@ -245,6 +260,9 @@ class Composite(BaseDataset):
         pass
 
     def get_darknet_exporter(self):
+        pass
+
+    def train_set(self):
         pass
 
     def download(self):

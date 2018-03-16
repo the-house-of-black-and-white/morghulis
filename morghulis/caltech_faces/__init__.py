@@ -99,8 +99,12 @@ class CaltechFaces(BaseDataset):
     # def get_darknet_exporter(self):
     #     pass
     #
-    # def get_coco_exporter(self):
-    #     pass
+
+    def get_coco_exporter(self):
+        from morghulis.exporters.coco import BaseCocoExporter
+        return BaseCocoExporter
 
     def download(self):
         CaltechFacesDownloader(self.root_dir).download()
+
+

@@ -4,7 +4,7 @@ import sys
 import unittest
 from shutil import rmtree
 
-from morghulis import AFW
+from morghulis.afw import AFW
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 log = logging.getLogger(__name__)
