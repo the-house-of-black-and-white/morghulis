@@ -90,12 +90,14 @@ class TensorflowExporter:
             difficult_obj.append(int(1) if face.blur > 0 else int(0))
 
         filename = image.raw_filename
+        parts = filename[0:-4].split('_')
+        source_id = parts[0] + parts[-2] + parts[-1]
 
         feature_dict = {
             'image/height': int64_feature(height),
             'image/width': int64_feature(width),
             'image/filename': bytes_feature(filename.encode('utf8')),
-            'image/source_id': bytes_feature(filename.encode('utf8')),
+            'image/source_id': bytes_feature(source_id.encode('utf8')),
             'image/key/sha256': bytes_feature(key.encode('utf8')),
             'image/encoded': bytes_feature(encoded_jpg),
             'image/format': bytes_feature('jpeg'.encode('utf8')),
