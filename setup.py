@@ -44,7 +44,8 @@ setup(
         'requests==2.19.1',
         'scipy==1.1.0',
         'lmdb==0.94',
-        'Pillow==5.2.0'
+        'Pillow==5.2.0',
+        'h5py'
     ],
 
     extras_require={
