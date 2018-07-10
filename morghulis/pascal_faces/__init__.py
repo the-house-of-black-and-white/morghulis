@@ -62,10 +62,6 @@ class Face(BaseFace):
     def h(self):
         return self._y2 - self._y1
 
-    @property
-    def center(self):
-        pass
-
 
 class PascalFaces(BaseDataset):
 
@@ -126,19 +122,8 @@ This dataset contains 1335 faces from 851 images with large appearance variation
                     annotation = os.path.join(self._annotations_dir, image_id + '.xml')
                     yield self._xml_to_image(annotation)
 
-    def get_tensorflow_exporter(self):
-        from morghulis.exporters.tf import TensorflowExporter
-        return TensorflowExporter
-
     def get_caffe_exporter(self):
         raise NotImplementedError()
-
-    def get_darknet_exporter(self):
-        raise NotImplementedError()
-
-    def get_coco_exporter(self):
-        from morghulis.exporters.coco import BaseCocoExporter
-        return BaseCocoExporter
 
     def download(self):
         from morghulis.pascal_faces.downloader import PascalFacesDownloader

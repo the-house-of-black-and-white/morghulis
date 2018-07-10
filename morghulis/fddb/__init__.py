@@ -1,9 +1,25 @@
 import logging
 import os
 
-from morghulis.model import BaseFace, Image, BaseDataset
+from morghulis.model import BaseFace, Image as BaseImage, BaseDataset
+
+try:
+    import cv2
+except:
+    logging.warning('OpenCV not found')
 
 log = logging.getLogger(__name__)
+
+
+class Image(BaseImage):
+    def __init__(self, filename, raw_filename=None):
+        BaseImage.__init__(self, filename, raw_filename)
+
+    def draw_faces(self, image=None, color=(0, 0, 255), thickness=3):
+        image = BaseImage.draw_faces(self, image, color, thickness)
+        for f in self.faces:
+            cv2.ellipse(image, f.center, (int(f.x2), int(f.y2)), color, thickness)
+        return image
 
 
 class Face(BaseFace):
@@ -122,7 +138,3 @@ class FDDB(BaseDataset):
     def get_darknet_exporter(self):
         from morghulis.fddb.darknet_exporter import DarknetExporter
         return DarknetExporter
-
-    def get_coco_exporter(self):
-        from morghulis.exporters.coco import BaseCocoExporter
-        return BaseCocoExporter

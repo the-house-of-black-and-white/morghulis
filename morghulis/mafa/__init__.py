@@ -1,7 +1,40 @@
 # coding=utf-8
+"""
+MAFA training set
+1) images folder puts the 25876 image files;
+2) the label is stored in LabelTrainAll.mat,
+3) the format is stored in a 18d array (x,y,w,h, x1,y1,x2,y2, x3,y3,w3,h3, occ_type, occ_degree, gender, race, orientation, x4,y4,w4,h4),  where
+    (a) (x,y,w,h) is the bounding box of a face,
+    (b) (x1,y1,x2,y2) is the position of two eyes.
+    (c) (x3,y3,w3,h3) is the bounding box of the occluder. Note that (x3,y3) is related to the face bounding box position (x,y)
+    (d) occ_type stands for the occluder type and has: 1 for simple, 2 for complex and 3 for human body.
+    (e) occ_degree stands for the number of occluded face parts
+    (f) gender and race stand for the gender and race of one face
+    (g) orientation stands for the face orientation/pose, and has: 1-left, 2-left frontal, 3-frontal, 4-right frontal, 5-right
+    (h) (x4,y4,w4,h4) is the bounding box of the glasses and is set to (-1,-1,-1,-1) when no glasses.  Note that (x4,y4) is related to the face bounding box position (x,y)
+
+MAFA testing set
+1) images folder puts the 4935 image files;
+2) the label is stored in LabelTestAll.mat,
+3) the format is stored in a 18d array (x,y,w,h,face_type,x1,y1,w1,h1, occ_type, occ_degree, gender, race, orientation, x2,y2,w2,h2), where
+    (a) (x,y,w,h) is the bounding box of a face,
+    (b) face_type stands for the face type and has: 1 for masked face, 2 for unmasked face and 3 for invalid face.
+    (c) (x1,y1,w1,h1) is the bounding box of the occluder. Note that (x1,y1) is related to the face bounding box position (x,y)
+    (d) occ_type stands for the occluder type and has: 1 for simple, 2 for complex and 3 for human body.
+    (e) occ_degree stands for the number of occluded face parts
+    (f) gender and race stand for the gender and race of one face
+    (g) orientation stands for the face orientation/pose, and has: 1-left, 2-left frontal, 3-frontal, 4-right frontal, 5-right
+    (h) (x2,y2,w2,h2) is the bounding box of the glasses and is set to (-1,-1,-1,-1) when no glasses.  Note that (x2,y2) is related to the face bounding box position (x,y)
+"""
+
 import logging
 import os
-import cv2
+
+try:
+    import cv2
+except:
+    logging.warning('OpenCV not found')
+
 import scipy.io
 
 from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
@@ -46,10 +79,26 @@ class Face(BaseFace):
             (f) gender and race stand for the gender and race of one face
             (g) orientation stands for the face orientation/pose, and has: 1-left, 2-left frontal, 3-frontal, 4-right frontal, 5-right
             (h) (x2,y2,w2,h2) is the bounding box of the glasses and is set to (-1,-1,-1,-1) when no glasses.  Note that (x2,y2) is related to the face bounding box position (x,y)
+
+        Data is a 21d array (x,y,w,h, x1,y1,x2,y2, x3,y3,w3,h3, occ_type, occ_degree, gender, race, orientation, x4,y4,w4,h4),  where
+            (a) (x,y,w,h) is the bounding box of a face,
+            (b) (x1,y1,x2,y2) is the position of two eyes.
+            (c) (x3,y3,w3,h3) is the bounding box of the occluder. Note that (x3,y3) is related to the face bounding box position (x,y)
+            (d) occ_type stands for the occluder type and has: 1 for simple, 2 for complex and 3 for human body.
+            (e) occ_degree stands for the number of occluded face parts
+            (f) gender and race stand for the gender and race of one face
+            (g) orientation stands for the face orientation/pose, and has: 1-left, 2-left frontal, 3-frontal, 4-right frontal, 5-right
+            (h) (x4,y4,w4,h4) is the bounding box of the glasses and is set to (-1,-1,-1,-1) when no glasses.  Note that (x4,y4) is related to the face bounding box position (x,y)
         """
-        self._x1, self._y1, self._w, self._h, self._type, x1, y1, w1, h1, self._occlusion_type, self._occ_degree, self._gender, self._race, self._orientation, x2, y2, w2, h2 = data
-        self._occluder_bbox = x1, y1, w1, h1
-        self._glasses_bbox = x2, y2, w2, h2
+        if len(data) <= 18:
+            self._x1, self._y1, self._w, self._h, self._type, x1, y1, w1, h1, self._occlusion_type, self._occ_degree, self._gender, self._race, self._orientation, x2, y2, w2, h2 = data
+            self._occluder_bbox = x1, y1, w1, h1
+            self._glasses_bbox = x2, y2, w2, h2
+        else:
+            # x3, y3, w3, h3, occ_type, occ_degree, gender, race, orientation, x4, y4, w4, h4
+            self._x1, self._y1, self._w, self._h, x1, y1, x2, y2, x3, y3, w3, h3, self._occlusion_type, self._occ_degree, self._gender, self._race, self._orientation, x4, y4, w4, h4 = data
+            self._occluder_bbox = x3, y3, w3, h3
+            self._glasses_bbox = x4, y4, w4, h4
 
     @property
     def x1(self):
@@ -66,10 +115,6 @@ class Face(BaseFace):
     @property
     def h(self):
         return self._h
-
-    @property
-    def center(self):
-        pass
 
     @property
     def type(self):
@@ -156,8 +201,8 @@ class Mafa(BaseDataset):
         return 'http://www.escience.cn/people/geshiming/mafa.html'
 
     def _load_images_from(self, annotation_file, key):
-        test_annotations = scipy.io.loadmat(annotation_file)
-        data = test_annotations[key]
+        annotations = scipy.io.loadmat(annotation_file)
+        data = annotations[key]
         for r in data[0]:
             raw_filename = r[0][0]
             image_filename = os.path.join(self.images_dir, raw_filename)
@@ -166,12 +211,25 @@ class Mafa(BaseDataset):
                 image.add_face(Face(data))
             yield image
 
+    def _load_train_images(self):
+        annotations = scipy.io.loadmat(self.annotations_file)
+        data = annotations['label_train']
+        for r in data[0]:
+            raw_filename = r[1][0]
+            image_filename = os.path.join(self.images_dir, raw_filename)
+            image = Image(image_filename, raw_filename)
+            for data in r[2]:
+                image.add_face(Face(data))
+            yield image
+
     def images(self):
-        for i in self._load_images_from(self.test_annotations_file, 'LabelTest'):
+        for i in self.train_set():
+            yield i
+        for i in self.test_set():
             yield i
 
     def train_set(self):
-        raise NotImplementedError()
+        return [i for i in self._load_train_images()]
 
     def val_set(self):
         raise NotImplementedError()

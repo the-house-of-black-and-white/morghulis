@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 import logging
 import os
 import re
+
 from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
 
 log = logging.getLogger(__name__)
@@ -104,10 +105,6 @@ class Face(BaseFace):
     @property
     def h(self):
         return self._h
-
-    @property
-    def center(self):
-        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
 
     @property
     def blur(self):
@@ -333,10 +330,6 @@ class Wider(BaseDataset):
     def get_caffe_exporter(self):
         from morghulis.widerface.caffe_exporter import CaffeExporter
         return CaffeExporter
-
-    def get_darknet_exporter(self):
-        from morghulis.widerface.darknet_exporter import DarknetExporter
-        return DarknetExporter
 
     def get_coco_exporter(self):
         from morghulis.widerface.coco_exporter import CocoExporter

@@ -50,10 +50,6 @@ class Face(BaseFace):
     def h(self):
         return self._h
 
-    @property
-    def center(self):
-        pass
-
 
 class CaltechFaces(BaseDataset):
 
@@ -88,21 +84,6 @@ class CaltechFaces(BaseDataset):
             image.add_face(Face(column))
             image_count += 1
             yield image
-
-
-    # def get_tensorflow_exporter(self):
-    #     pass
-    #
-    # def get_caffe_exporter(self):
-    #     pass
-    #
-    # def get_darknet_exporter(self):
-    #     pass
-    #
-
-    def get_coco_exporter(self):
-        from morghulis.exporters.coco import BaseCocoExporter
-        return BaseCocoExporter
 
     def download(self):
         CaltechFacesDownloader(self.root_dir).download()

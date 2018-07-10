@@ -103,3 +103,6 @@ ENV/
 .tmp/
 test/sample/WIDER_val/annotations/
 test/sample/WIDER_train/annotations/
+
+test/afw/
+train/

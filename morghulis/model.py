@@ -139,13 +139,16 @@ class BaseFace:
     def poly(self):
         return [self.x1, self.y1, self.x1, self.y2, self.x2, self.y2, self.x2, self.y1]
 
-    @abstractproperty
+    @property
     def center(self):
-        pass
+        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
 
     @property
     def invalid(self):
         return 0
+
+    def __str__(self):
+        return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
 
 
 FORMATS = {
@@ -199,16 +202,19 @@ class BaseDataset:
         exporter.export(target_dir)
 
     def get_tensorflow_exporter(self):
-        raise NotImplementedError()
+        from morghulis.exporters.tf import TensorflowExporter
+        return TensorflowExporter
 
     def get_caffe_exporter(self):
         raise NotImplementedError()
 
     def get_darknet_exporter(self):
-        raise NotImplementedError()
+        from morghulis.exporters.darknet import DarknetExporter
+        return DarknetExporter
 
     def get_coco_exporter(self):
-        raise NotImplementedError()
+        from morghulis.exporters.coco import BaseCocoExporter
+        return BaseCocoExporter
 
     @abstractmethod
     def download(self):

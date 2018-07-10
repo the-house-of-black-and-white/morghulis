@@ -43,10 +43,6 @@ class Face(BaseFace):
     def h(self):
         return self._h
 
-    @property
-    def center(self):
-        return self.x1 + (self.w / 2.), self.y1 + (self.h / 2.)
-
     def __str__(self):
         return 'Face(x1={}, y1={}, w={}, h={})'.format(self.x1, self.y1, self.w, self.h)
 
@@ -105,14 +101,6 @@ class AFW(BaseDataset):
     def download(self):
         AFWDownloader(self.root_dir).download()
 
-    def get_tensorflow_exporter(self):
-        from morghulis.afw.tensorflow_exporter import TensorflowExporter
-        return TensorflowExporter
-
     def get_darknet_exporter(self):
         from morghulis.afw.darknet_exporter import DarknetExporter
         return DarknetExporter
-
-    def get_coco_exporter(self):
-        from morghulis.exporters.coco import BaseCocoExporter
-        return BaseCocoExporter

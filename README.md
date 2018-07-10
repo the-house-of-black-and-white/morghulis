@@ -51,6 +51,12 @@ docker run --rm -it \
     -v ${PWD}/datasets:/ds \
     housebw/morghulis \
     ./export.py --dataset=widerface --format=coco --data_dir=/ds/widerface/ --output_dir=/ds/widerface/coco/
+
+    docker run --rm -it \
+        -v ${PWD}/datasets:/datasets \
+        housebw/morghulis \
+        ./export.py --dataset=widerface --format=darknet --data_dir=/datasets/widerface/ --output_dir=/datasets/widerface/darknet/
+
     
 ```
 
@@ -74,4 +80,13 @@ ds.export(tf_output_dir, target_format='tensorflow')
 
 # generates COCO json file (useful for Detectron)
 ds.export(coco_output_dir, target_format='coco')
+```
+
+
+
+```bash
+
+docker run -it --rm -v /mnt/hdd/datasets:/datasets -p 8888:8888 -e "PYTHONPATH=$PYTHONPATH:/morghulis" -v ${PWD}:/morghulis -v ${PWD}/notebooks:/data deeone/ipython-opencv:3.3.0 start-notebook.sh --NotebookApp.token=
+
+
 ```

@@ -33,7 +33,6 @@ class DarknetExporter:
                 if len(i.faces) > 0:
                     path = i.copy_to(images_root, include_subdirs=True)
                     full.write('{}\n'.format(path))
-
                     head, _ = os.path.splitext(path)
                     head, tail = os.path.split(head)
                     annotation_dir = os.path.join(annotations_root, i.subdir) if i.subdir else annotations_root
