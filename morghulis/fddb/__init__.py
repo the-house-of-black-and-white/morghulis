@@ -15,11 +15,11 @@ class Image(BaseImage):
     def __init__(self, filename, raw_filename=None):
         BaseImage.__init__(self, filename, raw_filename)
 
-    def draw_faces(self, image=None, color=(0, 0, 255), thickness=3):
-        image = BaseImage.draw_faces(self, image, color, thickness)
-        for f in self.faces:
-            cv2.ellipse(image, f.center, (int(f.x2), int(f.y2)), color, thickness)
-        return image
+    # def draw_faces(self, image=None, color=(0, 0, 255), thickness=3):
+    #     image = BaseImage.draw_faces(self, image, color, thickness)
+    #     for f in self.faces:
+    #         cv2.ellipse(image, f.center, (int(f.x2), int(f.y2)), color, thickness)
+    #     return image
 
 
 class Face(BaseFace):
