@@ -17,9 +17,10 @@ Currently the following datasets are supported:
  * [FDDB](http://vis-www.cs.umass.edu/fddb/) - 2,845 images and 5,171 faces.
  * [AFW](https://www.ics.uci.edu/~xzhu/face/) - 205 images and 473 faces.
  * [PASCAL faces](https://www.ics.uci.edu/~xzhu/face/) - 850 images and 1335 faces.
- * **TODO** [MAFA](http://www.escience.cn/people/geshiming/mafa.html) - 30,811 images and 35,806 masked faces.
+ * [MAFA](http://www.escience.cn/people/geshiming/mafa.html) - 30,811 images and 35,806 masked faces.
+ * [Caltech faces](http://www.vision.caltech.edu/html-files/archive.html) - 450 frontal face images of 27 or so unique people
  * **TODO** [IJB-C](https://www.nist.gov/itl/iad/image-group/ijb-c-dataset-request-form-0)
- * **TODO** [Caltech faces](http://www.vision.caltech.edu/html-files/archive.html) - 450 frontal face images of 27 or so unique people
+
 
 ## Usage
 
