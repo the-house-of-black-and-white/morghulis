@@ -14,6 +14,8 @@ import sys
 import logging
 import argparse
 
+from morghulis import create_dataset
+
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
@@ -24,23 +26,7 @@ def main():
     args = parser.parse_args()
     dataset = args.dataset
     output_dir = args.output_dir
-
-    if dataset == 'widerface':
-        from morghulis.widerface import Wider
-        ds = Wider(output_dir)
-    elif dataset == 'fddb':
-        from morghulis.fddb import FDDB
-        ds = FDDB(output_dir)
-    elif dataset == 'afw':
-        from morghulis.afw import AFW
-        ds = AFW(output_dir)
-    elif dataset == 'pascal_faces':
-        from morghulis.pascal_faces import PascalFaces
-        ds = PascalFaces(output_dir)
-    else:
-        logging.error('Invalid dataset name %s', dataset)
-        raise ValueError('Invalid dataset name %s' % dataset)
-
+    ds = create_dataset(dataset, output_dir)
     ds.download()
 
 
