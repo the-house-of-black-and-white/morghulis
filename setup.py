@@ -41,7 +41,9 @@ setup(
 
     # Dependent packages (distributions)
     install_requires=[
-        'requests'
+        'requests',
+        'scipy',
+        'lmdb'
     ],
 
     extras_require={
