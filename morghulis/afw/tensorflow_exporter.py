@@ -7,7 +7,7 @@ import os
 import tensorflow as tf
 from PIL import Image as PilImage
 
-from morghulis import ensure_dir
+from morghulis import os_utils
 
 log = logging.getLogger(__name__)
 
@@ -133,5 +133,5 @@ class TensorflowExporter:
         writer.close()
 
     def export(self, output_dir):
-        ensure_dir(output_dir)
+        os_utils.ensure_dir(output_dir)
         self._export(output_dir, 'train')

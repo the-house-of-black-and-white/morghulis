@@ -57,11 +57,17 @@ class Image(BaseImage):
             cv2.rectangle(image, (x, y), (int(f.x2), int(f.y2)), color, thickness)
 
             x1, y1, w1, h1 = f.occluder_bbox
-            cv2.rectangle(image, (int(x + x1), int(y + y1)), (int(x + x1 + w1), int(y + y1 + h1)), (0, 255, 255), thickness)
+            cv2.rectangle(image, (int(x + x1), int(y + y1)), (int(x + w1), int(y + h1)), (0, 255, 255), thickness)
 
             x2, y2, w2, h2 = f.glasses_bbox
             if x2 != -1:
-                cv2.rectangle(image, (int(x + x2), int(y + y2)), (int(x + x2 + w2), int(y + y2 + h2)), (255, 0, 0), thickness)
+                cv2.rectangle(image, (int(x + x2), int(y + y2)), (int(x + w2), int(y + h2)), (255, 0, 0), thickness)
+
+            if f.eye1:
+                cv2.circle(image, f.eye1, 10, (0, 0, 255), thickness)
+
+            if f.eye2:
+                cv2.circle(image, f.eye2, 10, (0, 0, 255), thickness)
 
         return image
 
@@ -94,11 +100,15 @@ class Face(BaseFace):
             self._x1, self._y1, self._w, self._h, self._type, x1, y1, w1, h1, self._occlusion_type, self._occ_degree, self._gender, self._race, self._orientation, x2, y2, w2, h2 = data
             self._occluder_bbox = x1, y1, w1, h1
             self._glasses_bbox = x2, y2, w2, h2
+            self._eye1 = None
+            self._eye2 = None
         else:
-            # x3, y3, w3, h3, occ_type, occ_degree, gender, race, orientation, x4, y4, w4, h4
             self._x1, self._y1, self._w, self._h, x1, y1, x2, y2, x3, y3, w3, h3, self._occlusion_type, self._occ_degree, self._gender, self._race, self._orientation, x4, y4, w4, h4 = data
+            self._eye1 = x1, y1
+            self._eye2 = x2, y2
             self._occluder_bbox = x3, y3, w3, h3
             self._glasses_bbox = x4, y4, w4, h4
+            self._type = None
 
     @property
     def x1(self):
@@ -171,6 +181,22 @@ class Face(BaseFace):
         """
         return self._glasses_bbox
 
+    @property
+    def eye1(self):
+        """"
+        """
+        return self._eye1
+
+    @property
+    def eye2(self):
+        """"
+        """
+        return self._eye2
+
+    def __str__(self):
+        return 'MafaFace(x={}, y={}, w={}, h={}, type={}, occlusion_type={}, race={}, gender={})'.format(
+            self.x1, self.y1, self.w, self.h, self.type, self.occlusion_type, self.race, self.gender)
+
 
 class Mafa(BaseDataset):
 
@@ -200,9 +226,9 @@ class Mafa(BaseDataset):
     def url(self):
         return 'http://www.escience.cn/people/geshiming/mafa.html'
 
-    def _load_images_from(self, annotation_file, key):
-        annotations = scipy.io.loadmat(annotation_file)
-        data = annotations[key]
+    def _load_test_images(self):
+        annotations = scipy.io.loadmat(self.test_annotations_file)
+        data = annotations['LabelTest']
         for r in data[0]:
             raw_filename = r[0][0]
             image_filename = os.path.join(self.images_dir, raw_filename)
@@ -218,8 +244,8 @@ class Mafa(BaseDataset):
             raw_filename = r[1][0]
             image_filename = os.path.join(self.images_dir, raw_filename)
             image = Image(image_filename, raw_filename)
-            for data in r[2]:
-                image.add_face(Face(data))
+            for face_data in r[2]:
+                image.add_face(Face(face_data))
             yield image
 
     def images(self):
@@ -238,20 +264,7 @@ class Mafa(BaseDataset):
         raise NotImplementedError()
 
     def test_set(self):
-        return [i for i in self._load_images_from(self.test_annotations_file, 'LabelTest')]
-
-    def get_tensorflow_exporter(self):
-        pass
-
-    def get_caffe_exporter(self):
-        pass
-
-    def get_darknet_exporter(self):
-        pass
-
-    def get_coco_exporter(self):
-        from morghulis.exporters.coco import BaseCocoExporter
-        return BaseCocoExporter
+        return [i for i in self._load_test_images()]
 
     def download(self):
         MafaDownloader(self.root_dir).download()
