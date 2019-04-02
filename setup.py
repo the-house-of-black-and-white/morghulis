@@ -41,7 +41,7 @@ setup(
 
     # Dependent packages (distributions)
     install_requires=[
-        'requests==2.19.1',
+        'requests==2.21.0',
         'scipy==1.1.0',
         'lmdb==0.94',
         'Pillow==5.2.0',
