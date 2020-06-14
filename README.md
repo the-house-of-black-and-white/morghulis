@@ -22,12 +22,9 @@ Currently the following datasets are supported:
  * [UFDD](https://ufdd.info/) - 6,425 images and 10,897 faces
  * **TODO** [IJB-C](https://www.nist.gov/itl/iad/image-group/ijb-c-dataset-request-form-0)
 
-
 ## Usage
 
-TODO
-
-### Docker
+### Using Docker
 
 ```bash
 # Download wider face
@@ -59,13 +56,17 @@ docker run --rm -it \
     -v ${PWD}/datasets:/datasets \
     housebw/morghulis \
     ./export.py --dataset=widerface --format=darknet --data_dir=/datasets/widerface/ --output_dir=/datasets/widerface/darknet/
-
-    
 ```
 
-### API
+### Programmatically (as a library)
 
-Use a `Wider` or `FDDB` dataset object to download and export to different formats:
+Install with `pip`:
+
+```bash
+pip install git+https://github.com/the-house-of-black-and-white/morghulis.git
+```
+
+Use the dataset object (e.g. `Wider` or `FDDB`) to download and export to different formats:
 
 ```python
 data_dir = '/datasets/WIDER'
