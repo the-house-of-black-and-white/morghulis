@@ -40,6 +40,9 @@ def main():
     elif dataset == 'afw':
         from morghulis.afw import AFW
         ds = AFW(data_dir)
+    elif dataset == 'ufdd':
+        from morghulis.ufdd import UFDD
+        ds = UFDD(data_dir)
     else:
         logging.error('Invalid dataset name %s', dataset)
 
