@@ -19,6 +19,7 @@ Currently the following datasets are supported:
  * [PASCAL faces](https://www.ics.uci.edu/~xzhu/face/) - 850 images and 1335 faces.
  * [MAFA](http://www.escience.cn/people/geshiming/mafa.html) - 30,811 images and 35,806 masked faces.
  * [Caltech faces](http://www.vision.caltech.edu/html-files/archive.html) - 450 frontal face images of 27 or so unique people
+ * [UFDD](https://ufdd.info/) - 6,425 images and 10,897 faces
  * **TODO** [IJB-C](https://www.nist.gov/itl/iad/image-group/ijb-c-dataset-request-form-0)
 
 
@@ -53,10 +54,11 @@ docker run --rm -it \
     housebw/morghulis \
     ./export.py --dataset=widerface --format=coco --data_dir=/ds/widerface/ --output_dir=/ds/widerface/coco/
 
-    docker run --rm -it \
-        -v ${PWD}/datasets:/datasets \
-        housebw/morghulis \
-        ./export.py --dataset=widerface --format=darknet --data_dir=/datasets/widerface/ --output_dir=/datasets/widerface/darknet/
+# Generate Darknet training files for widerface
+docker run --rm -it \
+    -v ${PWD}/datasets:/datasets \
+    housebw/morghulis \
+    ./export.py --dataset=widerface --format=darknet --data_dir=/datasets/widerface/ --output_dir=/datasets/widerface/darknet/
 
     
 ```
@@ -81,13 +83,4 @@ ds.export(tf_output_dir, target_format='tensorflow')
 
 # generates COCO json file (useful for Detectron)
 ds.export(coco_output_dir, target_format='coco')
-```
-
-
-
-```bash
-
-docker run -it --rm -v /mnt/hdd/datasets:/datasets -p 8888:8888 -e "PYTHONPATH=$PYTHONPATH:/morghulis" -v ${PWD}:/morghulis -v ${PWD}/notebooks:/data deeone/ipython-opencv:3.3.0 start-notebook.sh --NotebookApp.token=
-
-
 ```
