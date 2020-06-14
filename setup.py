@@ -22,7 +22,8 @@ setup(
         "morghulis.exporters",
         "morghulis.fddb",
         "morghulis.mafa",
-        "morghulis.caltech_faces"
+        "morghulis.caltech_faces",
+        "morghulis.ufdd"
     ],
 
     # package_dir={'': 'lib'},
