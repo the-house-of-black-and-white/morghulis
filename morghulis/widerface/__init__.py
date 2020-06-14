@@ -280,6 +280,10 @@ class Wider(BaseDataset):
                 log.debug(filename)
                 image = Image(os.path.join(images_dir, filename), filename)
                 face_num = int(f.readline().rstrip())
+
+                if face_num == 0:
+                    log.warning('No faces for {}. Ignoring next line {}'.format(image.filename, f.readline().rstrip()))
+
                 log.debug(face_num)
                 for _ in range(face_num):
                     anno = f.readline().rstrip().split()
