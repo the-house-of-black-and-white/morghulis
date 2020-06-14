@@ -7,46 +7,19 @@ from __future__ import unicode_literals
 
 import logging
 import os
-import re
 
 from morghulis.model import Image as BaseImage, BaseFace, BaseDataset
 from morghulis.ufdd.downloader import UFDDDownloader
 
 log = logging.getLogger(__name__)
 
-# https://ufdd.info/
-
-CATEGORY_RE = re.compile(r".*/(\d+)--([a-zA-Z0-9_-]+)/.*")
-
-
-class Event:
-    def __init__(self, filename):
-        match = next(re.finditer(CATEGORY_RE, filename))
-        self._id = match.group(1)
-        self._category = match.group(2).replace('_', ' ')
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def category(self):
-        return self._category
-
-    def __str__(self):
-        return 'Event(id={}, category={})'.format(self.id, self.category)
-
 
 class Image(BaseImage):
     def __init__(self, filename, raw_filename=None):
         BaseImage.__init__(self, filename, raw_filename)
-        self.event = Event(filename)
-
-    def category_dir(self):
-        return '{}--{}'.format(self.event.id, self.event.category.replace(' ', '_'))
 
     def __str__(self):
-        return 'Image(filename={}, event={})'.format(self.filename, self.event)
+        return 'Image(filename={})'.format(self.filename)
 
 
 class Face(BaseFace):
@@ -105,7 +78,7 @@ class UFDD(BaseDataset):
 
     def __init__(self, root_dir):
         super(UFDD, self).__init__(root_dir)
-        self._val_gt = os.path.join(self.root_dir, 'UFDD-annotationfile', 'UFDD_split', 'UFDD_val_bbx_gt.txt')
+        self._val_gt = os.path.join(self.root_dir, 'UFDD-annotationfile', 'UFDD_split', 'UFDD_val_bbx_gt-woDistractor.txt')
         self._val_images_dir = os.path.join(self.root_dir, 'UFDD_val', 'images')
 
     @staticmethod
