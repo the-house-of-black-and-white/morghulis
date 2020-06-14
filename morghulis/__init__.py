@@ -20,6 +20,9 @@ def create_dataset(dataset_name, data_dir):
     elif dataset_name == 'caltech':
         from morghulis.caltech_faces import CaltechFaces
         ds = CaltechFaces(data_dir)
+    elif dataset_name == 'ufdd':
+        from morghulis.ufdd import UFDD
+        ds = UFDD(data_dir)
     else:
         logging.error('Invalid dataset name %s', dataset_name)
         raise ValueError('Invalid dataset name %s' % dataset_name)
