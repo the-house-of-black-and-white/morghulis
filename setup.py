@@ -45,7 +45,7 @@ setup(
         'requests==2.21.0',
         'scipy==1.1.0',
         'lmdb==0.94',
-        'Pillow==8.1.1',
+        'Pillow==8.2.0',
         'h5py==2.8.0'
     ],
 
